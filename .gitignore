@@ -1,5 +1,5 @@
 .gradle
-/build/
+/buildgst/
 !gradle/wrapper/gradle-wrapper.jar
 gradle/wrapper/gradle-wrapper.jar
 
