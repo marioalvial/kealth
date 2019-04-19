@@ -5,9 +5,9 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-abstract class HealthIndicator {
+abstract class HealthComponent {
 
-    abstract val componentName: String
+    abstract val name: String
 
     suspend fun health(): HealthStatus = withContext(Dispatchers.Default) {
         runCatching { isHealth() }

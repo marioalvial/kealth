@@ -1,6 +1,6 @@
 package br.com.ms.kealth
 
-data class UnhealthyComponentResponse(
+data class HealthResponse(
     val name: String,
-    val criticality: CriticalLevel
+    val status: HealthStatus
 )
