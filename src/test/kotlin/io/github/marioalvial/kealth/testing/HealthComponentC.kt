@@ -12,7 +12,7 @@ class HealthComponentC : HealthComponent {
         println("Starting isHealth of component $name")
         delay(500)
         println("Finish isHealth of component $name - 500ms")
-        return HealthStatus.UNHEALTHY
+        throw RuntimeException("$name throws exception")
     }
 
     override suspend fun handleFailure(throwable: Throwable?) {

@@ -63,6 +63,8 @@ jacocoTestCoverageVerification {
     }
 }
 
+check.dependsOn jacocoTestCoverageVerification
+
 dokka {
     outputFormat = 'html'
     outputDirectory = "$buildDir/javadoc"

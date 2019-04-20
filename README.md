@@ -8,6 +8,7 @@
 ###    ###       ##########       ###     ###    ########## ###           ###    ###  
 ```
 [![CircleCI](https://circleci.com/gh/marioalvial/kealth.svg?style=svg)](https://circleci.com/gh/marioalvial/kealth)
+[![codecov](https://codecov.io/gh/marioalvial/kealth/branch/master/graph/badge.svg)](https://codecov.io/gh/marioalvial/kealth)
 
 Health check for external dependencies in Kotlin
 
