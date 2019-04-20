@@ -3,6 +3,7 @@ plugins {
     id 'org.jetbrains.dokka' version '0.9.18'
     id 'maven-publish'
     id 'signing'
+    id 'jacoco'
 }
 
 group 'io.github.marioalvial'
@@ -29,6 +30,28 @@ compileKotlin {
 }
 compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
+}
+
+jacoco {
+    reportsDir = file("$buildDir/customJacocoReportDir")
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled false
+        csv.enabled false
+        html.destination file("${buildDir}/jacocoHtml")
+    }
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.60
+            }
+        }
+    }
 }
 
 dokka {
