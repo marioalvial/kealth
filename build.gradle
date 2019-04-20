@@ -9,6 +9,10 @@ plugins {
 group 'io.github.marioalvial'
 version '1.0-SNAPSHOT'
 
+ext{
+    sonatype_username=project.properties['sonatype_username'] ?: ""
+    sonatype_password=project.properties['sonatype_password'] ?: ""
+}
 repositories {
     mavenCentral()
     jcenter()

@@ -6,7 +6,7 @@ jobs:
       - image: circleci/openjdk:8
     steps:
       - checkout
-      - run: ./gradlew build
+      - run: ./gradlew clean build -x signArchives --console=verbose
       - run:
           name: Code coverage
           command: |
