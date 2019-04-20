@@ -72,7 +72,7 @@ val aggregator = HealthAggregator(listOf(HealthComponentA()))
 val componentMap = runBlocking { aggregator.health() }
 ```
 
-**Make sure to execute health() method on a coroutine or suspending function.**
+**Make sure to execute health() method on a coroutine or suspend function.**
 
 ## Handle Failure
 
