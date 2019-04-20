@@ -1,4 +1,4 @@
-package br.com.ms.kealth
+package com.github.marioalvial.kealth
 
 enum class HealthStatus {
     HEALTH,

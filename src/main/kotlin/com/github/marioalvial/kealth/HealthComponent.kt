@@ -1,21 +1,22 @@
-package br.com.ms.kealth
+package com.github.marioalvial.kealth
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
+import com.github.marioalvial.kealth.HealthStatus.*
+import kotlinx.coroutines.Dispatchers.Default
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+
 
 abstract class HealthComponent {
 
     abstract val name: String
 
-    suspend fun health(): HealthStatus = withContext(Dispatchers.Default) {
+    suspend fun health(): HealthStatus = withContext(Default) {
         runCatching { isHealth() }
             .fold(
                 onSuccess = { it },
                 onFailure = {
-                    GlobalScope.launch { handleFailure(it) }
-                    HealthStatus.UNHEALTHY
+                    launch { handleFailure(it) }
+                    UNHEALTHY
                 }
             )
     }
