@@ -17,9 +17,9 @@ TBD
 
 ## Continuous Integration and Test Coverage
 
-Test Coverage configured on CodeCov. Checkout the [test coverage here](https://codecov.io/gh/marioalvial/moip-challenge).
+Test Coverage configured on CodeCov. Checkout the [test coverage here](https://codecov.io/gh/marioalvial/kealth).
 
-Continuous Integration is configured on CircleCI. Checkout the [continuous integration here](https://circleci.com/gh/marioalvial/moip-challenge)
+Continuous Integration is configured on CircleCI. Checkout the [continuous integration here](https://circleci.com/gh/marioalvial/kealth)
 
 ##  Testing
 
