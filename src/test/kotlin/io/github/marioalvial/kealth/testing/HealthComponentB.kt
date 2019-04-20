@@ -4,11 +4,11 @@ import io.github.marioalvial.kealth.HealthComponent
 import io.github.marioalvial.kealth.HealthStatus
 import kotlinx.coroutines.delay
 
-class HealthComponentB : HealthComponent {
+class HealthComponentB : HealthComponent() {
 
     override val name = "component B"
 
-    override suspend fun isHealth(): HealthStatus {
+    override suspend fun doHealthCheck(): HealthStatus {
         println("Starting isHealth of component $name")
         delay(2000)
         println("Finish isHealth of component $name - 2s")

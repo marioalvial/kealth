@@ -20,7 +20,7 @@ class HealthAggregator(
      * Execute the health method of each health component and builds a map with component name and health status.
      * @return Map<String, HealthStatus>
      */
-    suspend fun health(): Map<String, HealthStatus> = withContext(Default) {
+    suspend fun aggregate(): Map<String, HealthStatus> = withContext(Default) {
         components
             .associate { it.name to async { it.health() } }
             .mapValues { it.value.await() }

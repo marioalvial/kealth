@@ -47,11 +47,11 @@ dependencies {
 1. Create your component:
 
 ```
-class HealthComponentA : HealthComponent {
+class HealthComponentA : HealthComponent() {
 
     override val name = "component A"
 
-    override suspend fun isHealth(): HealthStatus {
+    override suspend fun doHealthCheck(): HealthStatus {
         val result = doHealthCheckCallToComponentAService()
         return if(result) HealthStatus.HEALTHY else HealthStatus.UNHEALTHY
     }
@@ -69,25 +69,25 @@ val aggregator = HealthAggregator(listOf(HealthComponentA()))
 
 3. Execute health method:
 ```
-val componentMap = runBlocking { aggregator.health() }
+val componentMap = runBlocking { aggregator.aggregate() }
 ```
 
-**Make sure to execute health() method on a coroutine or suspend function.**
+**Make sure to execute aggregate() method on a coroutine or suspend function.**
 
 ## Handle Failure
 
 handleFailure method of your health component will be trigger only if:
 
-- isHealth() call returns HealthStatus.UNHEALTHY (in this case the throwable parameter will be null)
+- doHealthCheck() call returns HealthStatus.UNHEALTHY (in this case the throwable parameter will be null)
 
-- isHealth() call throws exception (in this case the throwable parameter will be the exception thrown)
+- doHealthCheck() call throws exception (in this case the throwable parameter will be the exception thrown)
 
 
 ## How it works
 
-When aggregator.health() is called it will execute all components health() method concurrently and it will create a map with the name of the component as key and health status as value.
+When aggregator.aggregate() is called it will execute all components health() method concurrently and it will create a map with the name of the component as key and health status as value.
 
-If isHealth() method throws exception or returns HealthStatus.UNHEALTHY the handleFailure() method will be executed asynchronously.
+If doHealthCheck() method throws exception or returns HealthStatus.UNHEALTHY the handleFailure() method will be executed asynchronously.
 
 ## Continuous Integration and Test Coverage
 
