@@ -15,6 +15,7 @@ ext{
     sonatype_username=project.properties['sonatype_username'] ?: ""
     sonatype_password=project.properties['sonatype_password'] ?: ""
 }
+
 repositories {
     mavenCentral()
     jcenter()
@@ -63,7 +64,10 @@ jacocoTestCoverageVerification {
     }
 }
 
-check.dependsOn jacocoTestCoverageVerification
+test {
+    testLogging.showStandardStreams = true
+    finalizedBy jacocoTestReport
+}
 
 dokka {
     outputFormat = 'html'
@@ -88,44 +92,49 @@ artifacts {
     archives javadocJar
 }
 
+signing {
+    sign configurations.archives
+}
+
 publishing {
     publications {
         maven(MavenPublication) {
-            groupId 'io.github.marioalvial'
-            artifactId 'kealth'
-            version '1.0.0'
-            pom {
-                name = 'kealth'
-                description = 'Health check for external dependencies in Kotlin'
-                url = 'https://github.com/marioalvial/kealth'
-                licenses {
-                    license {
-                        name = 'The Apache License, Version 2.0'
-                        url = 'https://github.com/marioalvial/kealth/blob/master/LICENSE'
-                    }
-                }
-                developers {
-                    developer {
-                        id = 'marioalvial'
-                        name = 'Mário Alvial'
-                        email = 'mse.alvial@gmail.com'
-                    }
-                }
-                scm {
-                    url = 'https://github.com/marioalvial/kealth'
-                    connection = 'scm:git:git://github.com/marioalvial/kealth.git'
-                    developerConnection = 'scm:git:ssh:git@github.com:marioalvial/kealth.git'
-                }
-            }
-
+            customizePom(pom)
+            groupId 'com.github.mautini'
+            artifactId 'schemaorg-java'
+            version '1.0.1'
 
             from components.java
+
+            // create the sign pom artifact
+            pom.withXml {
+                def pomFile = file("${project.buildDir}/generated-pom.xml")
+                writeTo(pomFile)
+                def pomAscFile = signing.sign(pomFile).signatureFiles[0]
+                artifact(pomAscFile) {
+                    classifier = null
+                    extension = 'pom.asc'
+                }
+            }
 
             artifact(sourceJar) {
                 classifier = 'sources'
             }
             artifact(javadocJar) {
                 classifier = 'javadoc'
+            }
+
+            // create the signed artifacts
+            project.tasks.signArchives.signatureFiles.each {
+                artifact(it) {
+                    def matcher = it.file =~ /-(sources|javadoc)\.jar\.asc$/
+                    if (matcher.find()) {
+                        classifier = matcher.group(1)
+                    } else {
+                        classifier = null
+                    }
+                    extension = 'jar.asc'
+                }
             }
         }
     }
@@ -140,8 +149,53 @@ publishing {
     }
 }
 
-signing {
-    sign configurations.archives
+def customizePom(pom) {
+    pom.withXml {
+        def root = asNode()
+
+        // eliminate test-scoped dependencies (no need in maven central POMs)
+        root.dependencies.removeAll { dep ->
+            dep.scope == "test"
+        }
+
+        // add all items necessary for maven central publication
+        root.children().last() + {
+            resolveStrategy = DELEGATE_FIRST
+
+            name = 'kealth'
+            description = 'Health check for external dependencies in Kotlin'
+            url = 'https://github.com/marioalvial/kealth'
+
+            organization {
+                name 'com.github.marioalvial'
+                url 'https://github.com/marioalvial'
+            }
+
+            issueManagement {
+                system 'GitHub'
+                url 'https://github.com/marioalvial/kealth/issues'
+            }
+            licenses {
+                license {
+                    name 'The Apache License, Version 2.0'
+                    url 'https://github.com/marioalvial/kealth/blob/master/LICENSE'
+                    distribution 'repo'
+                }
+            }
+            scm {
+                url 'https://github.com/marioalvial/kealth'
+                connection 'scm:git:git://github.com/marioalvial/kealth.git'
+                developerConnection 'scm:git:ssh:git@github.com:marioalvial/kealth.git'
+            }
+            developers {
+                developer {
+                    id 'marioalvial'
+                    name 'Mário Alvial'
+                    email 'mse.alvial@gmail.com'
+                }
+            }
+        }
+    }
 }
 
 model {
