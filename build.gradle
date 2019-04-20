@@ -48,8 +48,8 @@ compileTestKotlin {
 
 jacocoTestReport {
     reports {
-        xml.enabled true
-        html.enabled false
+        xml.enabled = true
+        html.enabled = true
     }
 }
 
