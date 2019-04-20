@@ -7,6 +7,7 @@
  #+#   #+#        #+#              #+#     #+#    #+#        #+#           #+#    #+#      
 ###    ###       ##########       ###     ###    ########## ###           ###    ###  
 ```
+[![CircleCI](https://circleci.com/gh/marioalvial/kealth.svg?style=svg)](https://circleci.com/gh/marioalvial/kealth)
 
 Health check for external dependencies in Kotlin
 
