@@ -1,15 +1,18 @@
 package io.github.marioalvial.kealth
 
 import io.github.marioalvial.kealth.testing.HealthComponentA
-import io.github.marioalvial.kealth.testing.HealthComponentD
 import io.github.marioalvial.kealth.testing.HealthComponentB
 import io.github.marioalvial.kealth.testing.HealthComponentC
-import io.mockk.*
+import io.github.marioalvial.kealth.testing.HealthComponentD
+import io.mockk.Called
+import io.mockk.coVerifyAll
+import io.mockk.coVerifyOrder
+import io.mockk.spyk
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Test
+import org.junit.Test
 
-internal class HealthAggregatorTest {
+class HealthAggregatorTest {
 
     private val componentA = spyk<HealthComponentA>()
     private val componentB = spyk<HealthComponentB>()

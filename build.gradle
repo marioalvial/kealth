@@ -21,14 +21,15 @@ repositories {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-    implementation "org.jetbrains.kotlin:kotlin-reflect"
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.2.0'
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    compile "org.jetbrains.kotlin:kotlin-reflect"
+    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.2.0'
 
-    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.2.0'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.4.2'
-    testImplementation 'org.assertj:assertj-core:3.11.1'
-    testImplementation 'io.mockk:mockk:1.9.3'
+    testCompile 'org.jetbrains.kotlin:kotlin-test'
+    testCompile 'org.jetbrains.kotlin:kotlin-test-junit'
+    testCompile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.2.0'
+    testCompile 'org.assertj:assertj-core:3.11.1'
+    testCompile 'io.mockk:mockk:1.9.3'
 }
 
 compileKotlin {
@@ -45,14 +46,10 @@ compileTestKotlin {
     }
 }
 
-jacoco {
-    reportsDir = file("$buildDir/customJacocoReportDir")
-}
-
 jacocoTestReport {
     reports {
-        xml.enabled true
-        html.enabled false
+        xml.enabled false
+        csv.enabled false
     }
 }
 
@@ -65,8 +62,6 @@ jacocoTestCoverageVerification {
         }
     }
 }
-
-check.dependsOn jacocoTestReport
 
 dokka {
     outputFormat = 'html'
