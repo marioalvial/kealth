@@ -9,6 +9,7 @@
 ```
 [![CircleCI](https://circleci.com/gh/marioalvial/kealth.svg?style=svg)](https://circleci.com/gh/marioalvial/kealth)
 [![codecov](https://codecov.io/gh/marioalvial/kealth/branch/master/graph/badge.svg)](https://codecov.io/gh/marioalvial/kealth)
+![Maven Central with version prefix filter](https://img.shields.io/maven-central/v/io.github.marioalvial/kealth/1.0.1.svg)
 
 Health check for external dependencies in Kotlin
 
