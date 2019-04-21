@@ -28,7 +28,7 @@ Health check for external dependencies in Kotlin
 <dependency>
     <groupId>io.github.marioalvial</groupId>
     <artifactId>kealth</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 </dependency>
 ```
 
@@ -39,7 +39,7 @@ repositories {
 }
 
 dependencies {
-    compile 'io.github.marioalvial:kealth:1.0.0'
+    compile 'io.github.marioalvial:kealth:1.0.1'
 }    
 ```
 
