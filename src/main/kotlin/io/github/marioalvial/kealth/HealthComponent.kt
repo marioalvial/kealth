@@ -1,8 +1,8 @@
 package io.github.marioalvial.kealth
 
-import io.github.marioalvial.kealth.HealthStatus.*
-import kotlinx.coroutines.*
-import kotlinx.coroutines.Dispatchers.Default
+import io.github.marioalvial.kealth.HealthStatus.UNHEALTHY
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 /**
  * Class that abstracts a health component.
@@ -16,19 +16,17 @@ abstract class HealthComponent {
      * Handle response of healthCheck() method
      * @return HealthStatus
      */
-    suspend fun health(): HealthStatus = withContext(Default) {
-        runCatching { doHealthCheck() }
-            .fold(
-                onSuccess = {
-                    if (it == UNHEALTHY) GlobalScope.launch { handleFailure() }
-                    it
-                },
-                onFailure = {
-                    GlobalScope.launch { handleFailure(it) }
-                    UNHEALTHY
-                }
-            )
-    }
+    suspend fun health(): HealthStatus = runCatching { doHealthCheck() }
+        .fold(
+            onSuccess = {
+                if (it == UNHEALTHY) GlobalScope.launch { handleFailure() }
+                it
+            },
+            onFailure = {
+                GlobalScope.launch { handleFailure(it) }
+                UNHEALTHY
+            }
+        )
 
     /**
      * If healthCheck() throws exception or return HealthStatus.UNHEALTHY executes logic to handle failure.
