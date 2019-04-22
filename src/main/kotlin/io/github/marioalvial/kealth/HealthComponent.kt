@@ -2,6 +2,7 @@ package io.github.marioalvial.kealth
 
 import io.github.marioalvial.kealth.HealthStatus.UNHEALTHY
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
 /**
@@ -19,11 +20,11 @@ abstract class HealthComponent {
     suspend fun health(): HealthStatus = runCatching { doHealthCheck() }
         .fold(
             onSuccess = {
-                if (it == UNHEALTHY) GlobalScope.launch { handleFailure() }
+                if (it == UNHEALTHY) coroutineScope { launch { handleFailure() } }
                 it
             },
             onFailure = {
-                GlobalScope.launch { handleFailure(it) }
+                coroutineScope { launch { handleFailure() } }
                 UNHEALTHY
             }
         )
