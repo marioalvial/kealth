@@ -86,9 +86,7 @@ handleFailure method of your health component will be trigger only if:
 
 ## How it works
 
-When aggregator.aggregate() is called it will execute all components health() method concurrently and it will create a map with the name of the component as key and health status as value.
-
-If doHealthCheck() method throws exception or returns HealthStatus.UNHEALTHY the handleFailure() method will be executed asynchronously.
+When aggregator.aggregate() is called it will execute all components health() method concurrently and create a map with the name of the component as key and health status as value.
 
 ## Continuous Integration and Test Coverage
 
