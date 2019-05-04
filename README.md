@@ -28,7 +28,7 @@ Health check for external dependencies in Kotlin
 <dependency>
     <groupId>io.github.marioalvial</groupId>
     <artifactId>kealth</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
 </dependency>
 ```
 
@@ -39,7 +39,7 @@ repositories {
 }
 
 dependencies {
-    compile 'io.github.marioalvial:kealth:1.0.3'
+    implementation 'io.github.marioalvial:kealth:1.0.4'
 }    
 ```
 
@@ -57,7 +57,7 @@ class HealthComponentA : HealthComponent() {
         return if(result) HealthStatus.HEALTHY else HealthStatus.UNHEALTHY
     }
 
-    override suspend fun handleFailure(throwable: Throwable?) {
+    override suspend fun handleFailure(throwable: Throwable) {
         sendAlert()
     }
 }
@@ -77,16 +77,13 @@ val componentMap = runBlocking { aggregator.aggregate() }
 
 ## Handle Failure
 
-handleFailure method of your health component will be trigger only if:
-
-- doHealthCheck() call returns HealthStatus.UNHEALTHY (in this case the throwable parameter will be null)
-
-- doHealthCheck() call throws exception (in this case the throwable parameter will be the exception thrown)
-
+handleFailure method of your health component will be trigger only if doHealthCheck() call throws exception.
 
 ## How it works
 
-When aggregator.aggregate() is called it will execute all components health() method concurrently and create a map with the name of the component as key and health status as value.
+When aggregator.aggregate() is called it will execute all components health() method in parallel and create a map with the component's name as key and health status as value.
+
+If the doHealthCheck() throws exception the component will trigger the handleFailure method asynchronous with the exception that was thrown.
 
 ## Continuous Integration and Test Coverage
 
