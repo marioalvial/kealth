@@ -52,12 +52,12 @@ class HealthComponentA : HealthComponent() {
 
     override val name = "component A"
 
-    override suspend fun doHealthCheck(): HealthStatus {
+    override fun doHealthCheck(): HealthStatus {
         val result = doHealthCheckCallToComponentAService()
         return if(result) HealthStatus.HEALTHY else HealthStatus.UNHEALTHY
     }
 
-    override suspend fun handleFailure(throwable: Throwable) {
+    override fun handleFailure(throwable: Throwable) {
         sendAlert()
     }
 }
@@ -70,10 +70,8 @@ val aggregator = HealthAggregator(listOf(HealthComponentA()))
 
 3. Execute health method:
 ```
-val componentMap = runBlocking { aggregator.aggregate() }
+val componentMap = aggregator.aggregate() 
 ```
-
-**Make sure to execute aggregate() method on a coroutine or suspend function.**
 
 ## Handle Failure
 
@@ -81,7 +79,7 @@ handleFailure method of your health component will be trigger only if doHealthCh
 
 ## How it works
 
-When aggregator.aggregate() is called it will execute all components health() method in parallel and create a map with the component's name as key and health status as value.
+When aggregator.aggregate() is called it will execute all components health() method in parallel and create a map with the component's name as key and health info as value.
 
 If the doHealthCheck() throws exception the component will trigger the handleFailure method asynchronous with the exception that was thrown.
 
