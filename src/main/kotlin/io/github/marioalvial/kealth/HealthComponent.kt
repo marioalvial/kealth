@@ -5,6 +5,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.Default
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
+import kotlin.system.measureTimeMillis
 
 /**
  * Class that abstracts a health component.
@@ -18,17 +19,20 @@ abstract class HealthComponent {
      * Handle response of healthCheck() method
      * @return HealthStatus
      */
-    suspend fun health(): HealthStatus {
+    suspend fun health(): HealthInfo {
         val context = context()
 
-        return runCatching { withContext(Default + context) { doHealthCheck() } }
-            .fold(
-                onSuccess = { it },
-                onFailure = {
-                    GlobalScope.launch(context) { handleFailure(it) }
-                    UNHEALTHY
-                }
-            )
+        return measureTimeMillisAndReturn {
+            runCatching { withContext(Default + context) { doHealthCheck() } }
+                .fold(
+                    onSuccess = { it },
+                    onFailure = {
+                        GlobalScope.launch(context) { handleFailure(it) }
+                        UNHEALTHY
+                    }
+                )
+        }
+            .let { HealthInfo(it.first, it.second) }
     }
 
     /**

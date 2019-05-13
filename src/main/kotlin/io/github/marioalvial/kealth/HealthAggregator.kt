@@ -2,6 +2,7 @@ package io.github.marioalvial.kealth
 
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.runBlocking
 
 /**
  * An aggregator of health components.
@@ -19,7 +20,7 @@ class HealthAggregator(
      * Execute the health method of each health component and builds a map with component name and health status.
      * @return Map<String, HealthStatus>
      */
-    suspend fun aggregate(): Map<String, HealthStatus> = coroutineScope {
+    fun aggregate(): Map<String, HealthInfo> = runBlocking {
         components
             .associate { it.name to async { it.health() } }
             .mapValues { it.value.await() }
