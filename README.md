@@ -8,10 +8,12 @@
 ###    ###       ##########       ###     ###    ########## ###           ###    ###  
 ```
 [![CircleCI](https://circleci.com/gh/marioalvial/kealth.svg?style=svg)](https://circleci.com/gh/marioalvial/kealth)
+[![Known Vulnerabilities](https://snyk.io/test/github/marioalvial/kealth/badge.svg?targetFile=build.gradle)](https://snyk.io/test/github/marioalvial/kealth?targetFile=build.gradle)
 [![codecov](https://codecov.io/gh/marioalvial/kealth/branch/master/graph/badge.svg)](https://codecov.io/gh/marioalvial/kealth)
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.marioalvial/kealth.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22io.github.marioalvial%22%20AND%20a:%22kealth%22)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/f51e7103bcc34855b506e947990b2395)](https://www.codacy.com/app/marioalvial/kealth?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=marioalvial/kealth&amp;utm_campaign=Badge_Grade)
 [![ktlint](https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081.svg)](https://ktlint.github.io/)
+[![HitCount](http://hits.dwyl.io/marioalvial/kealth.svg)](http://hits.dwyl.io/marioalvial/kealth)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 Health check for external dependencies in Kotlin
