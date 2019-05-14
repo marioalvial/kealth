@@ -1,7 +1,6 @@
 package io.github.marioalvial.kealth
 
 import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.runBlocking
 
 /**

@@ -1,11 +1,12 @@
 package io.github.marioalvial.kealth
 
 import io.github.marioalvial.kealth.HealthStatus.UNHEALTHY
-import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.Default
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
-import kotlin.system.measureTimeMillis
 
 /**
  * Class that abstracts a health component.
