@@ -5,7 +5,7 @@ package io.github.marioalvial.kealth
  * @property status Status of health component
  * @property duration Duration of component's health check execution
  */
-class HealthInfo(
+data class HealthInfo(
     val status: HealthStatus,
     val duration: Long
 )
