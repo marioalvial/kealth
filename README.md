@@ -9,13 +9,16 @@
 ```
 [![CircleCI](https://circleci.com/gh/marioalvial/kealth.svg?style=svg)](https://circleci.com/gh/marioalvial/kealth)
 [![codecov](https://codecov.io/gh/marioalvial/kealth/branch/master/graph/badge.svg)](https://codecov.io/gh/marioalvial/kealth)
-![Maven Central](https://img.shields.io/maven-central/v/io.github.marioalvial/kealth.svg)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.marioalvial/kealth.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22io.github.marioalvial%22%20AND%20a:%22kealth%22)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/f51e7103bcc34855b506e947990b2395)](https://www.codacy.com/app/marioalvial/kealth?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=marioalvial/kealth&amp;utm_campaign=Badge_Grade)
+[![ktlint](https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081.svg)](https://ktlint.github.io/)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 Health check for external dependencies in Kotlin
 
 ## Installation
 
-#### Maven:
+### Maven
 ```
 <repositories>
     <repository>
@@ -28,18 +31,18 @@ Health check for external dependencies in Kotlin
 <dependency>
     <groupId>io.github.marioalvial</groupId>
     <artifactId>kealth</artifactId>
-    <version>1.0.4</version>
+    <version>1.0.5</version>
 </dependency>
 ```
 
-#### Gradle:
+### Gradle
 ```
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    implementation 'io.github.marioalvial:kealth:1.0.4'
+    implementation 'io.github.marioalvial:kealth:1.0.5'
 }    
 ```
 
@@ -89,7 +92,7 @@ Test Coverage configured on CodeCov. Checkout the [test coverage here](https://c
 
 Continuous Integration is configured on CircleCI. Checkout the [continuous integration here](https://circleci.com/gh/marioalvial/kealth)
 
-##  Testing
+## Testing
 
 ```shell
 ./gradlew test
