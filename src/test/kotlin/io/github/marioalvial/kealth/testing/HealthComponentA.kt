@@ -2,13 +2,6 @@ package io.github.marioalvial.kealth.testing
 
 import io.github.marioalvial.kealth.HealthComponent
 import io.github.marioalvial.kealth.HealthStatus
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.asContextElement
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import java.math.BigInteger
-import java.util.*
-import kotlin.coroutines.CoroutineContext
 
 class HealthComponentA : HealthComponent() {
 
