@@ -1,6 +1,5 @@
-package io.github.marioalvial.kealth
+package io.github.marioalvial.kealth.extensions
 
-import io.github.marioalvial.kealth.extensions.measureTimeMillisAndReturn
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.data.Percentage
 import org.junit.Test

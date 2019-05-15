@@ -1,7 +1,5 @@
-package io.github.marioalvial.kealth
+package io.github.marioalvial.kealth.core
 
-import io.github.marioalvial.kealth.core.HealthAggregator
-import io.github.marioalvial.kealth.core.HealthStatus
 import io.github.marioalvial.kealth.testing.*
 import io.mockk.coEvery
 import io.mockk.coVerify
