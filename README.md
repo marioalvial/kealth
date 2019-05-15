@@ -82,7 +82,7 @@ val aggregator = HealthAggregator(listOf(HealthComponentA()))
 val componentMap: Map<String, HealthInfo> = aggregator.aggregate() 
 ```
 
-**Example of serialized componentMap for json:**
+**Example of `componentMap` serialized for json:**
 
 ```json
 {
