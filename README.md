@@ -1,5 +1,7 @@
 ![Valiktor](docs/logo.png)
 
+> Kealth is a health check library for external dependencies in Kotlin
+
 [![CircleCI](https://circleci.com/gh/marioalvial/kealth.svg?style=svg)](https://circleci.com/gh/marioalvial/kealth)
 [![Known Vulnerabilities](https://snyk.io/test/github/marioalvial/kealth/badge.svg?targetFile=build.gradle)](https://snyk.io/test/github/marioalvial/kealth?targetFile=build.gradle)
 [![codecov](https://codecov.io/gh/marioalvial/kealth/branch/master/graph/badge.svg)](https://codecov.io/gh/marioalvial/kealth)
@@ -8,8 +10,6 @@
 [![ktlint](https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081.svg)](https://ktlint.github.io/)
 [![HitCount](http://hits.dwyl.io/marioalvial/kealth.svg)](http://hits.dwyl.io/marioalvial/kealth)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-
-> Kealth is a health check library for external dependencies in Kotlin
 
 ## Installation
 
