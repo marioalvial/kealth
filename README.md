@@ -79,9 +79,23 @@ val aggregator = HealthAggregator(listOf(HealthComponentA()))
 3. Execute `aggregate()`:
 
 ```kotlin
-val componentMap = aggregator.aggregate() 
+val componentMap: Map<String, HealthInfo> = aggregator.aggregate() 
 ```
 
+**Example of serialized componentMap for json:**
+
+```json
+{
+	"component-A": {
+		"status": "HEALTHY",
+		"duration": 1500
+	},
+	"component-B": {
+		"status": "UNHEALTHY",
+		"duration": 400
+	}
+}
+```
 ## Handle Failure
 
 `handleFailure()` will be trigger only if `doHealthCheck()` call throws exception.
