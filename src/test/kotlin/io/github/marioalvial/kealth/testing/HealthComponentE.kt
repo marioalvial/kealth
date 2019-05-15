@@ -2,9 +2,6 @@ package io.github.marioalvial.kealth.testing
 
 import io.github.marioalvial.kealth.core.HealthComponent
 import io.github.marioalvial.kealth.core.HealthStatus
-import kotlinx.coroutines.asContextElement
-import kotlinx.coroutines.runBlocking
-import kotlin.coroutines.CoroutineContext
 
 class HealthComponentE : HealthComponent() {
 
@@ -15,7 +12,7 @@ class HealthComponentE : HealthComponent() {
         println("Starting isHealth of component $name in thread ${Thread.currentThread().name}")
 
         Thread.sleep(500)
-        threadLocal.get() ?:throw IllegalAccessException("You can't access thread local")
+        threadLocal.get() ?: throw IllegalAccessException("You can't access thread local")
 
         println("Finish isHealth of component $name - 500ms")
 
