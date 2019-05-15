@@ -27,7 +27,7 @@
 <dependency>
     <groupId>io.github.marioalvial</groupId>
     <artifactId>kealth</artifactId>
-    <version>1.0.5</version>
+    <version>${kealth-version}</version>
 </dependency>
 ```
 
@@ -39,7 +39,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'io.github.marioalvial:kealth:1.0.5'
+    implementation "io.github.marioalvial:kealth:$kealth_version"
 }    
 ```
 
