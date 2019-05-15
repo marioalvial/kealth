@@ -1,12 +1,5 @@
-```
-      :::    :::       ::::::::::           :::        :::    :::::::::::       :::    ::: 
-     :+:   :+:        :+:                :+: :+:      :+:        :+:           :+:    :+:  
-    +:+  +:+         +:+               +:+   +:+     +:+        +:+           +:+    +:+   
-   +#++:++          +#++:++#         +#++:++#++:    +#+        +#+           +#++:++#++    
-  +#+  +#+         +#+              +#+     +#+    +#+        +#+           +#+    +#+     
- #+#   #+#        #+#              #+#     #+#    #+#        #+#           #+#    #+#      
-###    ###       ##########       ###     ###    ########## ###           ###    ###  
-```
+![Valiktor](docs/logo.png)
+
 [![CircleCI](https://circleci.com/gh/marioalvial/kealth.svg?style=svg)](https://circleci.com/gh/marioalvial/kealth)
 [![Known Vulnerabilities](https://snyk.io/test/github/marioalvial/kealth/badge.svg?targetFile=build.gradle)](https://snyk.io/test/github/marioalvial/kealth?targetFile=build.gradle)
 [![codecov](https://codecov.io/gh/marioalvial/kealth/branch/master/graph/badge.svg)](https://codecov.io/gh/marioalvial/kealth)
@@ -16,7 +9,7 @@
 [![HitCount](http://hits.dwyl.io/marioalvial/kealth.svg)](http://hits.dwyl.io/marioalvial/kealth)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-Health check for external dependencies in Kotlin
+> Kealth is a health check library for external dependencies in Kotlin
 
 ## Installation
 
