@@ -1,4 +1,4 @@
-package io.github.marioalvial.kealth
+package io.github.marioalvial.kealth.extensions
 
 /**
  * Function that measures the duration of the block passed as a parameter

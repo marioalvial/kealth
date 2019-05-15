@@ -1,6 +1,7 @@
-package io.github.marioalvial.kealth
+package io.github.marioalvial.kealth.core
 
-import io.github.marioalvial.kealth.HealthStatus.UNHEALTHY
+import io.github.marioalvial.kealth.core.HealthStatus.UNHEALTHY
+import io.github.marioalvial.kealth.extensions.measureTimeMillisAndReturn
 import kotlinx.coroutines.Dispatchers.Default
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch

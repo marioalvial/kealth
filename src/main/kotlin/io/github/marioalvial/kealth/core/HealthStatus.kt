@@ -1,4 +1,4 @@
-package io.github.marioalvial.kealth
+package io.github.marioalvial.kealth.core
 
 /**
  * Enum that indicates the status of health component

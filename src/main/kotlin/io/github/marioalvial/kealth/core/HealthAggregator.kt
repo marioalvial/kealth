@@ -1,4 +1,4 @@
-package io.github.marioalvial.kealth
+package io.github.marioalvial.kealth.core
 
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking

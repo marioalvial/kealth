@@ -1,14 +1,14 @@
 package io.github.marioalvial.kealth.testing
 
-import io.github.marioalvial.kealth.HealthComponent
-import io.github.marioalvial.kealth.HealthStatus
+import io.github.marioalvial.kealth.core.HealthComponent
+import io.github.marioalvial.kealth.core.HealthStatus
 
 class HealthComponentA : HealthComponent() {
 
     override val name = "component A"
 
     override fun doHealthCheck(): HealthStatus {
-        println("Starting isHealth of component $name")
+        println("Starting isHealth of component $name in thread ${Thread.currentThread().name}")
 
         Thread.sleep(100)
 
@@ -18,7 +18,7 @@ class HealthComponentA : HealthComponent() {
     }
 
     override fun handleFailure(throwable: Throwable) {
-            println("Starting handleFailure of component $name")
+            println("Starting handleFailure of component $name in thread ${Thread.currentThread().name}")
 
             Thread.sleep(100)
 

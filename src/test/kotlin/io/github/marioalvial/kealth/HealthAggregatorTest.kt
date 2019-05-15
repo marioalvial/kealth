@@ -1,14 +1,15 @@
 package io.github.marioalvial.kealth
 
-import io.github.marioalvial.kealth.testing.HealthComponentA
-import io.github.marioalvial.kealth.testing.HealthComponentB
-import io.github.marioalvial.kealth.testing.HealthComponentC
-import io.github.marioalvial.kealth.testing.HealthComponentD
+import io.github.marioalvial.kealth.core.HealthAggregator
+import io.github.marioalvial.kealth.core.HealthStatus
+import io.github.marioalvial.kealth.testing.*
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.spyk
+import io.mockk.verify
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
+import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatCode
 import org.junit.Test
@@ -19,6 +20,7 @@ class HealthAggregatorTest {
     private val componentB = spyk<HealthComponentB>()
     private val componentC = spyk<HealthComponentC>()
     private val componentD = spyk<HealthComponentD>()
+    private val componentE = spyk<HealthComponentE>()
 
     @Test
     fun `given health components should return only healthy status`() {
@@ -57,6 +59,17 @@ class HealthAggregatorTest {
         val aggregator = HealthAggregator(listOf(componentB))
 
         assertThatCode { aggregator.aggregate() }.doesNotThrowAnyException()
+
+        verify(exactly = 1) { componentB.handleFailure(any()) }
+    }
+
+    @Test
+    fun `given unhealthy components without thread context should execute handleFailure passing context`() {
+        val aggregator = HealthAggregator(listOf(componentE))
+
+        assertThatCode { aggregator.aggregate() }.doesNotThrowAnyException()
+
+        verify(exactly = 1) { componentE.handleFailure(any()) }
     }
 
     @Test
