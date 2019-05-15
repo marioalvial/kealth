@@ -20,8 +20,9 @@ Health check for external dependencies in Kotlin
 
 ## Installation
 
-### Maven
-```
+![Maven](docs/maven.png) 
+
+```xml
 <repositories>
     <repository>
         <id>central</id>
@@ -37,8 +38,9 @@ Health check for external dependencies in Kotlin
 </dependency>
 ```
 
-### Gradle
-```
+![Gradle](docs/gradle.png)
+
+```groovy
 repositories {
     mavenCentral()
 }
@@ -52,7 +54,7 @@ dependencies {
 
 1. Create your component:
 
-```
+```kotlin
 class HealthComponentA : HealthComponent() {
 
     override val name = "component A"
@@ -68,25 +70,27 @@ class HealthComponentA : HealthComponent() {
 }
 ```
 
-2. Instantiate HealthAggregator:
-```
+2. Instantiate `HealthAggregator`:
+
+```kotlin
 val aggregator = HealthAggregator(listOf(HealthComponentA()))
 ```
 
-3. Execute health method:
-```
+3. Execute `aggregate()`:
+
+```kotlin
 val componentMap = aggregator.aggregate() 
 ```
 
 ## Handle Failure
 
-handleFailure method of your health component will be trigger only if doHealthCheck() call throws exception.
+`handleFailure()` will be trigger only if `doHealthCheck()` call throws exception.
 
 ## How it works
 
-When aggregator.aggregate() is called it will execute all components health() method in parallel and create a map with the component's name as key and health info as value.
+When `aggregator.aggregate()` is called it will execute `health()` of each component in parallel and create a map with the component's name as key and health info as value.
 
-If the doHealthCheck() throws exception the component will trigger the handleFailure method asynchronous with the exception that was thrown.
+If the `doHealthCheck()` throws exception the component will trigger the `handleFailure()` method asynchronous with the exception that was thrown.
 
 ## Continuous Integration and Test Coverage
 
