@@ -1,4 +1,4 @@
-![Valiktor](docs/logo.png)
+![Kealth](docs/logo.png)
 
 > Kealth is a health check library for external dependencies in Kotlin
 
@@ -75,7 +75,7 @@ val aggregator = HealthAggregator(listOf(HealthComponentA()))
 val componentMap: Map<String, HealthInfo> = aggregator.aggregate() 
 ```
 
-**Example of `componentMap` serialized for json:**
+**Example of `componentMap` serialized to json:**
 
 ```json
 {
