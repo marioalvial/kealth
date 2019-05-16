@@ -3,7 +3,7 @@ package io.github.marioalvial.kealth.testing
 import io.github.marioalvial.kealth.core.HealthComponent
 import io.github.marioalvial.kealth.core.HealthStatus
 
-class HealthComponentE : HealthComponent() {
+class HealthComponentE : HealthComponent {
 
     override val name = "component E"
     private val threadLocal = ThreadLocal<String>().apply { set("Thread Local $name") }

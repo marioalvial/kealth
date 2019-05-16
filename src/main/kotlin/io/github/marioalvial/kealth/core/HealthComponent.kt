@@ -10,12 +10,12 @@ import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
 /**
- * Class that abstracts a health component.
+ * Interface that abstracts a health component.
  * @property name Name of health component
  */
-abstract class HealthComponent {
+interface HealthComponent {
 
-    abstract val name: String
+    val name: String
 
     /**
      * Handle response of healthCheck() method
@@ -41,17 +41,17 @@ abstract class HealthComponent {
      * If healthCheck() throws exception or return HealthStatus.UNHEALTHY executes logic to handle failure.
      * @param throwable Throwable?
      */
-    abstract fun handleFailure(throwable: Throwable)
+    fun handleFailure(throwable: Throwable)
 
     /**
      * Execute the component's health check logic
      * @return HealthStatus
      */
-    abstract fun doHealthCheck(): HealthStatus
+    fun doHealthCheck(): HealthStatus
 
     /**
      * Set shared context between threads
      * @return CoroutineContext
      */
-    protected open fun context(): CoroutineContext = EmptyCoroutineContext
+    fun context(): CoroutineContext = EmptyCoroutineContext
 }

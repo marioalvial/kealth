@@ -29,8 +29,8 @@ class HealthAggregatorTest {
         assertThat(healthMap.values).allMatch { it.status == HealthStatus.HEALTHY }
         assertThat(healthMap[componentD.name]?.duration).isGreaterThan(healthMap[componentA.name]?.duration)
 
-        coVerify(exactly = 2) { componentA.health() }
-        coVerify(exactly = 2) { componentD.health() }
+        coVerify(exactly = 1) { componentA.health() }
+        coVerify(exactly = 1) { componentD.health() }
         coVerify(exactly = 0) { componentA.handleFailure(any()) }
         coVerify(exactly = 0) { componentD.handleFailure(any()) }
     }
@@ -45,8 +45,8 @@ class HealthAggregatorTest {
         assertThat(healthMap.values).allMatch { it.status == HealthStatus.UNHEALTHY }
         assertThat(healthMap[componentC.name]?.duration).isGreaterThan(healthMap[componentB.name]?.duration)
 
-        coVerify(exactly = 2) { componentB.health() }
-        coVerify(exactly = 2) { componentC.health() }
+        coVerify(exactly = 1) { componentB.health() }
+        coVerify(exactly = 1) { componentC.health() }
         coVerify(exactly = 1) { componentB.handleFailure(any()) }
         coVerify(exactly = 1) { componentC.handleFailure(any()) }
     }
@@ -97,10 +97,10 @@ class HealthAggregatorTest {
         assertThat(healthMap.values).filteredOn { it.status == HealthStatus.HEALTHY }.hasSize(2)
         assertThat(healthMap.values).filteredOn { it.status == HealthStatus.UNHEALTHY }.hasSize(2)
 
-        coVerify(exactly = 2) { componentA.health() }
-        coVerify(exactly = 2) { componentB.health() }
-        coVerify(exactly = 2) { componentC.health() }
-        coVerify(exactly = 2) { componentD.health() }
+        coVerify(exactly = 1) { componentA.health() }
+        coVerify(exactly = 1) { componentB.health() }
+        coVerify(exactly = 1) { componentC.health() }
+        coVerify(exactly = 1) { componentD.health() }
         coVerify(exactly = 0) { componentA.handleFailure(any()) }
         coVerify(exactly = 1) { componentB.handleFailure(any()) }
         coVerify(exactly = 1) { componentC.handleFailure(any()) }

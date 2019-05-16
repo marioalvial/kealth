@@ -3,7 +3,7 @@ package io.github.marioalvial.kealth.testing
 import io.github.marioalvial.kealth.core.HealthComponent
 import io.github.marioalvial.kealth.core.HealthStatus
 
-class HealthComponentD : HealthComponent() {
+class HealthComponentD : HealthComponent {
 
     override val name = "component D"
 

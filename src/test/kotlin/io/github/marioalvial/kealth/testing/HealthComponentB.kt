@@ -5,7 +5,7 @@ import io.github.marioalvial.kealth.core.HealthStatus
 import kotlinx.coroutines.asContextElement
 import kotlin.coroutines.CoroutineContext
 
-class HealthComponentB : HealthComponent() {
+class HealthComponentB : HealthComponent {
 
     override val name = "component B"
     private val threadLocal = ThreadLocal<String>().apply { set("Thread Local $name") }
