@@ -7,188 +7,201 @@ plugins {
     id 'jacoco'
 }
 
-group 'io.github.marioalvial'
-version '1.0.7'
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-
-ext {
-    sonatype_username = project.properties['sonatype_username'] ?: ""
-    sonatype_password = project.properties['sonatype_password'] ?: ""
-}
-
-repositories {
-    mavenCentral()
-    jcenter()
-}
-
-dependencies {
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-    compile "org.jetbrains.kotlin:kotlin-reflect"
-    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.2.0'
-
-    testCompile 'org.jetbrains.kotlin:kotlin-test'
-    testCompile 'org.jetbrains.kotlin:kotlin-test-junit'
-    testCompile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.2.0'
-    testCompile 'org.assertj:assertj-core:3.11.1'
-    testCompile 'io.mockk:mockk:1.9.3'
-}
-
-compileKotlin {
-    kotlinOptions {
-        freeCompilerArgs = ["-Xjsr305=strict"]
-        jvmTarget = "1.8"
+subprojects {
+    apply {
+        plugin 'kotlin'
+        plugin 'org.jetbrains.dokka'
+        plugin 'maven-publish'
+        plugin 'org.jmailen.kotlinter'
+        plugin 'signing'
+        plugin 'jacoco'
     }
-}
 
-compileTestKotlin {
-    kotlinOptions {
-        freeCompilerArgs = ["-Xjsr305=strict"]
-        jvmTarget = "1.8"
+    dependencies {
+        compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+        compile "org.jetbrains.kotlin:kotlin-reflect"
+
+        testCompile 'org.jetbrains.kotlin:kotlin-test'
+        testCompile 'org.jetbrains.kotlin:kotlin-test-junit'
+        testCompile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.2.0'
+        testCompile 'org.assertj:assertj-core:3.11.1'
+        testCompile 'io.mockk:mockk:1.9.3'
     }
-}
 
-jacocoTestReport {
-    reports {
-        xml.enabled = true
-        html.enabled = true
-    }
-}
-
-jacocoTestCoverageVerification {
-    violationRules {
-        rule {
-            limit {
-                minimum = 0.60
-            }
-        }
-    }
-}
-
-test {
-    testLogging.showStandardStreams = true
-    finalizedBy jacocoTestReport
-}
-
-dokka {
-    outputFormat = 'html'
-    outputDirectory = "$buildDir/javadoc"
-}
-
-task('sourceJar', type: Jar) {
-    classifier 'sources'
-    from sourceSets.main.getAllSource()
-}
-
-task('javadocJar', type: Jar) {
-    classifier 'javadoc'
-    description 'Assembles Kotlin docs with Dokka'
-    group JavaBasePlugin.DOCUMENTATION_GROUP
-    from(tasks.dokka)
-}
-
-artifacts {
-    archives jar
-    archives sourceJar
-    archives javadocJar
-}
-
-signing {
-    sign configurations.archives
-}
-
-publishing {
-    publications {
-        maven(MavenPublication) {
-            groupId 'io.github.marioalvial'
-            artifactId 'kealth'
-            version version
-
-            from components.java
-
-            artifact(sourceJar) {
-                classifier = 'sources'
-            }
-            artifact(javadocJar) {
-                classifier = 'javadoc'
-            }
-
-            pom.withXml{
-                    def pomFile = file("${project.buildDir}/generated-pom.xml")
-                    writeTo(pomFile)
-                    def pomAscFile = signing.sign(pomFile).signatureFiles[0]
-                    artifact(pomAscFile) {
-                        classifier = null
-                        extension = 'pom.asc'
-                    }
-            }
-            
-            pom {
-                name = 'kealth'
-                description = 'Health check for external dependencies in Kotlin'
-                url = 'https://github.com/marioalvial/kealth'
-                licenses {
-                    license {
-                        name = 'The Apache License, Version 2.0'
-                        url = 'https://github.com/marioalvial/kealth/blob/master/LICENSE'
-                    }
-                }
-                developers {
-                    developer {
-                        id = 'marioalvial'
-                        name = 'Mário Alvial'
-                        email = 'mse.alvial@gmail.com'
-                    }
-                }
-                scm {
-                    url = 'https://github.com/marioalvial/kealth'
-                    connection = 'scm:git:git://github.com/marioalvial/kealth.git'
-                    developerConnection = 'scm:git:ssh:git@github.com:marioalvial/kealth.git'
-                }
-            }
-
-            project.tasks.signArchives.signatureFiles.each {
-                artifact(it) {
-                    def matcher = it.file =~ /-(sources|javadoc)\.jar\.asc$/
-                    if (matcher.find()) {
-                        classifier = matcher.group(1)
-                    } else {
-                        classifier = null
-                    }
-                    extension = 'jar.asc'
-                }
-
-            }
-        }
-    }
     repositories {
-        maven {
-            url "https://oss.sonatype.org/service/local/staging/deploy/maven2"
-            credentials {
-                username sonatype_username
-                password sonatype_password
+        mavenCentral()
+        jcenter()
+    }
+
+//version '1.0.7'
+//    sourceCompatibility = 1.8
+//    targetCompatibility = 1.8
+
+    ext {
+        sonatype_username = project.properties['sonatype_username'] ?: ""
+        sonatype_password = project.properties['sonatype_password'] ?: ""
+    }
+
+    subprojects {
+        group 'io.github.marioalvial'
+
+        compileKotlin {
+            kotlinOptions {
+                freeCompilerArgs = ["-Xjsr305=strict"]
+                jvmTarget = "1.8"
             }
         }
-    }
-}
 
-model {
-    tasks.generatePomFileForMavenPublication {
-        destination = file("$buildDir/generated-pom.xml")
-    }
-    tasks.publishMavenPublicationToMavenLocal {
-        dependsOn project.tasks.signArchives
-    }
-    tasks.publishMavenPublicationToMavenRepository {
-        dependsOn project.tasks.signArchives
-    }
-}
+        compileTestKotlin {
+            kotlinOptions {
+                freeCompilerArgs = ["-Xjsr305=strict"]
+                jvmTarget = "1.8"
+            }
+        }
 
-kotlinter {
-    ignoreFailures = true
-    indentSize = 4
-    continuationIndentSize = 4
-    reporters = ['checkstyle', 'plain']
-    experimentalRules = false
-    fileBatchSize = 30
+        jacocoTestReport {
+            reports {
+                xml.enabled = true
+                html.enabled = true
+            }
+        }
+
+        jacocoTestCoverageVerification {
+            violationRules {
+                rule {
+                    limit {
+                        minimum = 0.60
+                    }
+                }
+            }
+        }
+
+        test {
+            testLogging.showStandardStreams = true
+            finalizedBy jacocoTestReport
+        }
+
+        dokka {
+            outputFormat = 'html'
+            outputDirectory = "$buildDir/javadoc"
+        }
+
+        task('sourceJar', type: Jar) {
+            classifier 'sources'
+            from sourceSets.main.getAllSource()
+        }
+
+        task('javadocJar', type: Jar) {
+            classifier 'javadoc'
+            description 'Assembles Kotlin docs with Dokka'
+            group JavaBasePlugin.DOCUMENTATION_GROUP
+            from(tasks.dokka)
+        }
+
+        artifacts {
+            archives jar
+            archives sourceJar
+            archives javadocJar
+        }
+
+        signing {
+            sign configurations.archives
+        }
+
+        publishing {
+            publications {
+                maven(MavenPublication) {
+//            groupId 'io.github.marioalvial'
+//            artifactId 'kealth'
+//            version version
+
+                    from components.java
+
+                    artifact(sourceJar) {
+                        classifier = 'sources'
+                    }
+                    artifact(javadocJar) {
+                        classifier = 'javadoc'
+                    }
+
+                    pom.withXml {
+                        def pomFile = file("${project.buildDir}/generated-pom.xml")
+                        writeTo(pomFile)
+                        def pomAscFile = signing.sign(pomFile).signatureFiles[0]
+                        artifact(pomAscFile) {
+                            classifier = null
+                            extension = 'pom.asc'
+                        }
+                    }
+
+                    pom {
+                        name = 'kealth'
+                        description = 'Health check for external dependencies in Kotlin'
+                        url = 'https://github.com/marioalvial/kealth'
+                        licenses {
+                            license {
+                                name = 'The Apache License, Version 2.0'
+                                url = 'https://github.com/marioalvial/kealth/blob/master/LICENSE'
+                            }
+                        }
+                        developers {
+                            developer {
+                                id = 'marioalvial'
+                                name = 'Mário Alvial'
+                                email = 'mse.alvial@gmail.com'
+                            }
+                        }
+                        scm {
+                            url = 'https://github.com/marioalvial/kealth'
+                            connection = 'scm:git:git://github.com/marioalvial/kealth.git'
+                            developerConnection = 'scm:git:ssh:git@github.com:marioalvial/kealth.git'
+                        }
+                    }
+
+                    project.tasks.signArchives.signatureFiles.each {
+                        artifact(it) {
+                            def matcher = it.file =~ /-(sources|javadoc)\.jar\.asc$/
+                            if (matcher.find()) {
+                                classifier = matcher.group(1)
+                            } else {
+                                classifier = null
+                            }
+                            extension = 'jar.asc'
+                        }
+
+                    }
+                }
+            }
+            repositories {
+                maven {
+                    url "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+                    credentials {
+                        username sonatype_username
+                        password sonatype_password
+                    }
+                }
+            }
+        }
+
+        model {
+            tasks.generatePomFileForMavenPublication {
+                destination = file("$buildDir/generated-pom.xml")
+            }
+            tasks.publishMavenPublicationToMavenLocal {
+                dependsOn project.tasks.signArchives
+            }
+            tasks.publishMavenPublicationToMavenRepository {
+                dependsOn project.tasks.signArchives
+            }
+        }
+
+        kotlinter {
+            ignoreFailures = true
+            indentSize = 4
+            continuationIndentSize = 4
+            reporters = ['checkstyle', 'plain']
+            experimentalRules = false
+            fileBatchSize = 30
+        }
+    }
 }
