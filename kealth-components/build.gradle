@@ -1,4 +1,0 @@
-dependencies {
-    compile project(':kealth-core')
-    testCompile project(':kealth-core')
-}

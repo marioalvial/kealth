@@ -1,10 +1,17 @@
 plugins {
-    id 'org.jetbrains.kotlin.jvm' version '1.3.30'
+    id 'org.jetbrains.kotlin.jvm' version '1.3.31'
     id 'org.jetbrains.dokka' version '0.9.18'
     id 'maven-publish'
     id 'org.jmailen.kotlinter' version '1.25.1'
     id 'signing'
     id 'jacoco'
+}
+
+allprojects {
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
 }
 
 subprojects {
@@ -17,29 +24,21 @@ subprojects {
         plugin 'jacoco'
     }
 
+    ext {
+        sonatype_username = project.properties['sonatype_username'] ?: ""
+        sonatype_password = project.properties['sonatype_password'] ?: ""
+    }
+
     dependencies {
         compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
         compile "org.jetbrains.kotlin:kotlin-reflect"
+        compile 'org.slf4j:slf4j-simple:1.7.26'
 
         testCompile 'org.jetbrains.kotlin:kotlin-test'
         testCompile 'org.jetbrains.kotlin:kotlin-test-junit'
         testCompile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.2.0'
         testCompile 'org.assertj:assertj-core:3.11.1'
         testCompile 'io.mockk:mockk:1.9.3'
-    }
-
-    repositories {
-        mavenCentral()
-        jcenter()
-    }
-
-//version '1.0.7'
-//    sourceCompatibility = 1.8
-//    targetCompatibility = 1.8
-
-    ext {
-        sonatype_username = project.properties['sonatype_username'] ?: ""
-        sonatype_password = project.properties['sonatype_password'] ?: ""
     }
 
     subprojects {
@@ -111,9 +110,6 @@ subprojects {
         publishing {
             publications {
                 maven(MavenPublication) {
-//            groupId 'io.github.marioalvial'
-//            artifactId 'kealth'
-//            version version
 
                     from components.java
 

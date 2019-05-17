@@ -2,7 +2,7 @@ rootProject.name = 'kealth'
 enableFeaturePreview('STABLE_PUBLISHING')
 
 include 'kealth-core'
-include 'kealth-components'
+include 'kealth-jdbc'
 
 
 

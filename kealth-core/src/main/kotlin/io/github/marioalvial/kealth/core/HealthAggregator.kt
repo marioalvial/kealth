@@ -4,11 +4,11 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 
 /**
- * An aggregator of health components.
+ * An aggregator of health jdbc.
  *
- * This class holds a list of health components.
+ * This class holds a list of health jdbc.
  *
- * @property components List<HealthComponent> - list of health components.
+ * @property components List<HealthComponent> - list of health jdbc.
  * @constructor Creates a health aggregator for the component list passed as constructor parameter.
  */
 class HealthAggregator(
