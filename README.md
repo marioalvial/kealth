@@ -26,7 +26,7 @@
 
 <dependency>
     <groupId>io.github.marioalvial</groupId>
-    <artifactId>kealth</artifactId>
+    <artifactId>kealth-core</artifactId>
     <version>${kealth-version}</version>
 </dependency>
 ```
@@ -39,7 +39,7 @@ repositories {
 }
 
 dependencies {
-    implementation "io.github.marioalvial:kealth:$kealth_version"
+    implementation "io.github.marioalvial:kealth-core:$kealth_version"
 }    
 ```
 
@@ -98,6 +98,13 @@ val componentMap: Map<String, HealthInfo> = aggregator.aggregate()
 When `aggregator.aggregate()` is called it will execute `health()` of each component in parallel and create a map with the component's name as key and health info as value.
 
 If the `doHealthCheck()` throws exception the component will trigger the `handleFailure()` method asynchronous with the exception that was thrown.
+
+## Modules
+
+| Module                                                                                   | Description                              | Artifacts                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| ---------------------------------------------------------------------------------------- | ---------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [kealth-core](kealth-core)                                                               | Core module                              | [![jar](https://img.shields.io/badge/jar-v0.5.0-green.svg)](https://search.maven.org/artifact/org.valiktor/valiktor-core/0.5.0/jar) [![javadoc](https://img.shields.io/badge/javadoc-v0.5.0-blue.svg)](https://search.maven.org/artifact/org.valiktor/valiktor-core/0.5.0/javadoc) [![sources](https://img.shields.io/badge/sources-v0.5.0-yellow.svg)](https://search.maven.org/artifact/org.valiktor/valiktor-core/0.5.0/sources)                                                                |
+| [kealth-jdbc](kealth-jdbc)                                                               | Health Component for JDBC                | [![jar](https://img.shields.io/badge/jar-v0.5.0-green.svg)](https://search.maven.org/artifact/org.valiktor/valiktor-core/0.5.0/jar) [![javadoc](https://img.shields.io/badge/javadoc-v0.5.0-blue.svg)](https://search.maven.org/artifact/org.valiktor/valiktor-core/0.5.0/javadoc) [![sources](https://img.shields.io/badge/sources-v0.5.0-yellow.svg)](https://search.maven.org/artifact/org.valiktor/valiktor-core/0.5.0/sources)                                                                |
 
 ## Continuous Integration and Test Coverage
 
