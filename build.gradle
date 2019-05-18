@@ -54,23 +54,13 @@ subprojects {
         }
     }
 
-    jacocoTestReport {
-        reports {
-            xml.enabled = true
-            html.enabled = true
-        }
-    }
-
-    jacocoTestCoverageVerification {
-        violationRules {
-            rule {
-                limit {
-                    minimum = 0.60
-                }
-            }
-        }
-    }
-
+//    jacocoTestReport {
+//        reports {
+//            xml.enabled = true
+//            html.enabled = true
+//        }
+//    }
+    
     test {
         testLogging.showStandardStreams = true
         finalizedBy jacocoTestReport
@@ -196,3 +186,29 @@ subprojects {
     }
 }
 
+task('codeCoverageReport', type: JacocoReport) {
+    executionData fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
+
+    subprojects.each {
+        sourceSets sourceSets.main
+    }
+
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.60
+            }
+        }
+    }
+}
+
+codeCoverageReport.dependsOn {
+    subprojects*.test
+}
