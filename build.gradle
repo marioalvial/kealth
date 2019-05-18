@@ -18,6 +18,7 @@ subprojects {
     apply {
         plugin("kotlin")
         plugin("signing")
+        plugin("jacoco")
         plugin("maven-publish")
         plugin("org.jetbrains.dokka")
         plugin("org.jmailen.kotlinter")
@@ -60,7 +61,7 @@ subprojects {
 //            html.enabled = true
 //        }
 //    }
-    
+
     test {
         testLogging.showStandardStreams = true
         finalizedBy jacocoTestReport
@@ -185,6 +186,7 @@ subprojects {
         fileBatchSize = 30
     }
 }
+
 
 task('codeCoverageReport', type: JacocoReport) {
     executionData fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
