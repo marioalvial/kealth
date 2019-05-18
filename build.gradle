@@ -23,12 +23,10 @@ subprojects {
         plugin("org.jetbrains.dokka")
         plugin("org.jmailen.kotlinter")
     }
-    
     ext {
         sonatype_username = project.properties['sonatype_username'] ?: ""
         sonatype_password = project.properties['sonatype_password'] ?: ""
     }
-
     dependencies {
         compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
         compile "org.jetbrains.kotlin:kotlin-reflect"
@@ -40,60 +38,44 @@ subprojects {
         testCompile 'org.assertj:assertj-core:3.11.1'
         testCompile 'io.mockk:mockk:1.9.3'
     }
-
     compileKotlin {
         kotlinOptions {
             freeCompilerArgs = ["-Xjsr305=strict"]
             jvmTarget = "1.8"
         }
     }
-
     compileTestKotlin {
         kotlinOptions {
             freeCompilerArgs = ["-Xjsr305=strict"]
             jvmTarget = "1.8"
         }
     }
-
-//    jacocoTestReport {
-//        reports {
-//            xml.enabled = true
-//            html.enabled = true
-//        }
-//    }
-
     test {
         testLogging.showStandardStreams = true
         finalizedBy jacocoTestReport
     }
-
     dokka {
         outputFormat = 'html'
         outputDirectory = "$buildDir/javadoc"
     }
-
     task('sourceJar', type: Jar) {
         classifier 'sources'
         from sourceSets.main.getAllSource()
     }
-
     task('javadocJar', type: Jar) {
         classifier 'javadoc'
         description 'Assembles Kotlin docs with Dokka'
         group JavaBasePlugin.DOCUMENTATION_GROUP
         from(tasks.dokka)
     }
-
     artifacts {
         archives jar
         archives sourceJar
         archives javadocJar
     }
-
     signing {
         sign configurations.archives
     }
-
     publishing {
         publications {
             maven(MavenPublication) {
@@ -164,7 +146,6 @@ subprojects {
             }
         }
     }
-
     model {
         tasks.generatePomFileForMavenPublication {
             destination = file("$buildDir/generated-pom.xml")
@@ -176,7 +157,6 @@ subprojects {
             dependsOn project.tasks.signArchives
         }
     }
-
     kotlinter {
         ignoreFailures = true
         indentSize = 4
@@ -185,19 +165,30 @@ subprojects {
         experimentalRules = false
         fileBatchSize = 30
     }
+    jacocoTestReport {
+        additionalSourceDirs = files(sourceSets.main.allSource.srcDirs)
+        sourceDirectories = files(sourceSets.main.allSource.srcDirs)
+        classDirectories =  files(sourceSets.main.output)
+
+        reports {
+            html.enabled = true
+            xml.enabled = true
+            csv.enabled = false
+        }
+    }
 }
 
-
-task('codeCoverageReport', type: JacocoReport) {
-    executionData fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
-
-    subprojects.each {
-        sourceSets sourceSets.main
-    }
+task('jacocoRootReport', type: JacocoReport) {
+    dependsOn = subprojects.test
+    additionalSourceDirs = files(subprojects.sourceSets.main.allSource.srcDirs)
+    sourceDirectories = files(subprojects.sourceSets.main.allSource.srcDirs)
+    classDirectories =  files(subprojects.sourceSets.main.output)
+    executionData = files(subprojects.jacocoTestReport.executionData)
 
     reports {
-        xml.enabled = true
         html.enabled = true
+        xml.enabled = true
+        csv.enabled = false
     }
 }
 
@@ -209,8 +200,4 @@ jacocoTestCoverageVerification {
             }
         }
     }
-}
-
-codeCoverageReport.dependsOn {
-    subprojects*.test
 }
