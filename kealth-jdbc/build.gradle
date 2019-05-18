@@ -1,0 +1,15 @@
+dependencies {
+    compile project(':kealth-core')
+
+    testCompile project(':kealth-core')
+}
+
+
+kotlinter {
+    ignoreFailures = true
+    indentSize = 4
+    continuationIndentSize = 4
+    reporters = ['checkstyle', 'plain']
+    experimentalRules = false
+    fileBatchSize = 30
+}
