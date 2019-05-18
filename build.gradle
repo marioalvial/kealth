@@ -178,8 +178,13 @@ subprojects {
     }
 }
 
+jacoco {
+    toolVersion = '0.8.3'
+}
+
 task('jacocoRootReport', type: JacocoReport) {
     dependsOn = subprojects.test
+
     additionalSourceDirs = files(subprojects.sourceSets.main.allSource.srcDirs)
     sourceDirectories = files(subprojects.sourceSets.main.allSource.srcDirs)
     classDirectories =  files(subprojects.sourceSets.main.output)

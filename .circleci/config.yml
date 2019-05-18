@@ -11,7 +11,7 @@ jobs:
           name: Code coverage
           command: |
             ./gradlew check
-            ./gradlew codeCoverageReport
+            ./gradlew jacocoRootReport
             ./gradlew jacocoTestCoverageVerification
             bash <(curl -s https://codecov.io/bash)
 workflows:
