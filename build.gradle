@@ -27,17 +27,7 @@ subprojects {
         sonatype_username = project.properties['sonatype_username'] ?: ""
         sonatype_password = project.properties['sonatype_password'] ?: ""
     }
-    dependencies {
-        compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-        compile "org.jetbrains.kotlin:kotlin-reflect"
-        compile 'org.slf4j:slf4j-simple:1.7.26'
 
-        testCompile 'org.jetbrains.kotlin:kotlin-test'
-        testCompile 'org.jetbrains.kotlin:kotlin-test-junit'
-        testCompile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.2.0'
-        testCompile 'org.assertj:assertj-core:3.11.1'
-        testCompile 'io.mockk:mockk:1.9.3'
-    }
     compileKotlin {
         kotlinOptions {
             freeCompilerArgs = ["-Xjsr305=strict"]

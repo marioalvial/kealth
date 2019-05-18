@@ -19,6 +19,7 @@ gradle/wrapper/gradle-wrapper.jar
 *.iml
 *.ipr
 /out/
+**/out/
 out/
 
 # Eclipse

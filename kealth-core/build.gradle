@@ -1,5 +1,14 @@
 dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.2.0'
+    compile "org.jetbrains.kotlin:kotlin-reflect"
+    compile 'org.slf4j:slf4j-simple:1.7.26'
+
+    testCompile 'org.jetbrains.kotlin:kotlin-test'
+    testCompile 'org.jetbrains.kotlin:kotlin-test-junit'
+    testCompile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.2.0'
+    testCompile 'org.assertj:assertj-core:3.11.1'
+    testCompile 'io.mockk:mockk:1.9.3'
 }
 
 kotlinter {
@@ -9,4 +18,15 @@ kotlinter {
     reporters = ['checkstyle', 'plain']
     experimentalRules = false
     fileBatchSize = 30
+}
+
+configurations {
+    testArtifacts.extendsFrom testCompile
+}
+task('testJar', type: Jar) {
+    classifier "test"
+    from sourceSets.test.output
+}
+artifacts {
+    testArtifacts testJar
 }

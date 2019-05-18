@@ -1,7 +1,6 @@
 dependencies {
     compile project(':kealth-core')
-
-    testCompile project(':kealth-core')
+    testCompile project(path: ":kealth-core", configuration: 'testArtifacts')
 }
 
 
