@@ -103,8 +103,8 @@ If the `doHealthCheck()` throws exception the component will trigger the `handle
 
 | Module                                                                                   | Description                              | Artifacts                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [kealth-core](kealth-core)                                                               | Core module                              | [![jar](https://img.shields.io/badge/jar-v1.0.8-green.svg)](https://search.maven.org/artifact/io.github.marioalvial/kealth-core/1.0.8/jar) [![javadoc](https://img.shields.io/badge/javadoc-v1.0.8-blue.svg)](https://search.maven.org/artifact/io.github.marioalvial/kealth-core/1.0.8/javadoc) [![sources](https://img.shields.io/badge/sources-v1.0.8-yellow.svg)](https://search.maven.org/artifact/io.github.marioalvial/kealth-core/1.0.8/sources)                                          |
-| [kealth-jdbc](kealth-jdbc)                                                               | Health Component for JDBC                | [![jar](https://img.shields.io/badge/jar-v1.0.8-green.svg)](https://search.maven.org/artifact/io.github.marioalvial/kealth-jdbc/1.0.8/jar) [![javadoc](https://img.shields.io/badge/javadoc-v1.0.8-blue.svg)](https://search.maven.org/artifact/io.github.marioalvial/kealth-jdbc/1.0.8/javadoc) [![sources](https://img.shields.io/badge/sources-v1.0.8-yellow.svg)](https://search.maven.org/artifact/io.github.marioalvial/kealth-jdbc/1.0.8/sources)                                          |
+| [kealth-core](kealth-core)                                                               | Core module                              | [![jar](https://img.shields.io/badge/jar-v1.0.9.0-green.svg)](https://search.maven.org/artifact/io.github.marioalvial/kealth-core/1.0.8/jar) [![javadoc](https://img.shields.io/badge/javadoc-v1.0.9.0-blue.svg)](https://search.maven.org/artifact/io.github.marioalvial/kealth-core/1.0.8/javadoc) [![sources](https://img.shields.io/badge/sources-v1.0.9.0-yellow.svg)](https://search.maven.org/artifact/io.github.marioalvial/kealth-core/1.0.8/sources)                                          |
+| [kealth-jdbc](kealth-jdbc)                                                               | Health Component for JDBC                | [![jar](https://img.shields.io/badge/jar-v1.0.9.0-green.svg)](https://search.maven.org/artifact/io.github.marioalvial/kealth-jdbc/1.0.8/jar) [![javadoc](https://img.shields.io/badge/javadoc-v1.0.9.0-blue.svg)](https://search.maven.org/artifact/io.github.marioalvial/kealth-jdbc/1.0.8/javadoc) [![sources](https://img.shields.io/badge/sources-v1.0.9.0-yellow.svg)](https://search.maven.org/artifact/io.github.marioalvial/kealth-jdbc/1.0.8/sources)                                          |
 
 ## Continuous Integration and Test Coverage
 
@@ -123,3 +123,19 @@ Continuous Integration is configured on CircleCI. Checkout the [continuous integ
 - [Kotlin](https://kotlinlang.org/) - Programming language
 - [IntelliJ](https://www.jetbrains.com/idea/) - IDE
 - [Gradle](https://gradle.org/) - Dependency Management
+
+## Changelog
+
+For latest updates see [CHANGELOG.md](CHANGELOG.md) file.
+
+## Contributing 
+
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for more details, and the process for submitting pull requests to us.
+
+## Authors
+
+* **[Mário Alvial](https://github.com/marioalvial)**
+
+## License
+
+This project is licensed under the Apache License, Version 2.0 - see the [LICENSE](LICENSE) file for details.
