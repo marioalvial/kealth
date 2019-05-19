@@ -52,19 +52,14 @@ class HttpHealthComponent(
      * Configure a HttpURLConnection (add method, timeout configuration, headers and parameters)
      * @return HttpURLConnection
      */
-    private fun getConfiguredConnection(): HttpURLConnection = (URL(url).openConnection() as HttpURLConnection).also {
+    private fun getConfiguredConnection(): HttpURLConnection = (URL(url).openConnection() as? HttpURLConnection)?.also {
         it.requestMethod = method
         it.connectTimeout = connectTimeout
         it.readTimeout = readTimeout
         if (parameters.isNotEmpty()) setRequestParameters(it, parameters)
         headers.forEach { header -> it.setRequestProperty(header.key, header.value) }
-    }
+    } ?: throw ClassCastException("It wasn't possible to execute the cast process")
 
-    /**
-     * Add parameters to connection
-     * @param connection HttpURLConnection
-     * @param parameters Map<String, String>
-     */
     private fun setRequestParameters(connection: HttpURLConnection, parameters: Map<String, String>) {
         connection.doOutput = true
         val out = DataOutputStream(connection.outputStream)

@@ -25,10 +25,6 @@ class ParametersBuilder(
         return if (result.isNotEmpty()) result.substring(0, result.length - 1) else result
     }
 
-    /**
-     * Build parameters as string
-     * @return String
-     */
     private fun build(): StringBuilder = parameters.entries.fold(StringBuilder()) { acc, entry ->
         acc.append(URLEncoder.encode(entry.key, "UTF-8"))
         acc.append("=")
