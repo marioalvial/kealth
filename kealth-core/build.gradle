@@ -2,7 +2,6 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.2.0'
     compile "org.jetbrains.kotlin:kotlin-reflect"
-    compile 'org.slf4j:slf4j-simple:1.7.26'
 
     testCompile 'org.jetbrains.kotlin:kotlin-test'
     testCompile 'org.jetbrains.kotlin:kotlin-test-junit'

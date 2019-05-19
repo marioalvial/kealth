@@ -39,7 +39,7 @@ interface HealthComponent {
 
     /**
      * If healthCheck() throws exception or return HealthStatus.UNHEALTHY executes logic to handle failure.
-     * @param throwable Throwable?
+     * @param throwable Throwable
      */
     fun handleFailure(throwable: Throwable)
 

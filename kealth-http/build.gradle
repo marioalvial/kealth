@@ -3,6 +3,7 @@ dependencies {
     testCompile project(path: ":kealth-core", configuration: 'testArtifacts')
 }
 
+
 kotlinter {
     ignoreFailures = true
     indentSize = 4
