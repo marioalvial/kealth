@@ -48,7 +48,7 @@ dependencies {
 1. Create your component:
 
 ```kotlin
-class HealthComponentA : HealthComponent() {
+class HealthComponentA : HealthComponent {
 
     override val name = "component A"
 
