@@ -1,3 +1,10 @@
+# 1.0.9.2
+> Published 30 May 2019
+
+#### Features:
+
+* Added `criticalLevel` property to HealthComponent
+
 # 1.0.9.1
 > Published 19 May 2019
 

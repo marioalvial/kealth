@@ -1,5 +1,6 @@
 package io.github.marioalvial.kealth
 
+import io.github.marioalvial.kealth.core.CriticalLevel
 import io.github.marioalvial.kealth.core.HealthStatus
 import io.mockk.every
 import io.mockk.spyk
@@ -13,7 +14,7 @@ import javax.sql.DataSource
 class JdbcHealthComponentTest {
 
     private val datasource = spyk<DataSource>()
-    private val jdbcComponent = spyk(JdbcHealthComponent("jdbc-component", datasource))
+    private val jdbcComponent = spyk(JdbcHealthComponent("jdbc-component", CriticalLevel.LOW, datasource))
 
     @Test
     fun `given valid connection with DB should execute validation successfully and return health info`() {
@@ -22,7 +23,6 @@ class JdbcHealthComponentTest {
         val healthInfo = runBlocking { jdbcComponent.health() }
 
         assertThat(jdbcComponent.name).isEqualTo("jdbc-component")
-        assertThat(healthInfo.duration).isLessThan(200)
         assertThat(healthInfo.status).isEqualTo(HealthStatus.HEALTHY)
 
         verify(exactly = 0) { jdbcComponent.handleFailure(any()) }
@@ -35,7 +35,7 @@ class JdbcHealthComponentTest {
         val healthInfo = runBlocking { jdbcComponent.health() }
 
         assertThat(jdbcComponent.name).isEqualTo("jdbc-component")
-        assertThat(healthInfo.duration).isLessThan(200)
+        assertThat(jdbcComponent.criticalLevel).isEqualTo("LOW")
         assertThat(healthInfo.status).isEqualTo(HealthStatus.UNHEALTHY)
 
         verify(exactly = 1) { jdbcComponent.handleFailure(any()) }
@@ -48,9 +48,9 @@ class JdbcHealthComponentTest {
         val healthInfo = runBlocking { jdbcComponent.health() }
 
         assertThat(jdbcComponent.name).isEqualTo("jdbc-component")
-        assertThat(healthInfo.duration).isLessThan(200)
+        assertThat(jdbcComponent.criticalLevel).isEqualTo("LOW")
         assertThat(healthInfo.status).isEqualTo(HealthStatus.UNHEALTHY)
 
-        verify(exactly = 1) { jdbcComponent.handleFailure(any()) }
+        verify(exactly = 0) { jdbcComponent.handleFailure(any()) }
     }
 }

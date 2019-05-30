@@ -21,6 +21,7 @@ import java.net.ConnectException
  */
 class HttpHealthComponent(
     override val name: String,
+    override val criticalLevel: String,
     private val url: String,
     private val method: String,
     private val healthStatusCode: Int = 200,
@@ -68,6 +69,5 @@ class HttpHealthComponent(
         out.close()
     }
 
-    override fun handleFailure(throwable: Throwable) {
-    }
+    override fun handleFailure(throwable: Throwable) = Unit
 }

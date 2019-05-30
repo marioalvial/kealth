@@ -3,7 +3,7 @@ package io.github.marioalvial.kealth
 import io.github.marioalvial.kealth.core.HealthComponent
 import io.github.marioalvial.kealth.core.HealthStatus
 import io.github.marioalvial.kealth.core.HealthStatus.HEALTHY
-import java.sql.SQLTimeoutException
+import io.github.marioalvial.kealth.core.HealthStatus.UNHEALTHY
 import javax.sql.DataSource
 
 /**
@@ -14,15 +14,15 @@ import javax.sql.DataSource
  */
 class JdbcHealthComponent(
     override val name: String,
+    override val criticalLevel: String,
     private val datasource: DataSource,
     private val timeout: Int = 3
 ) : HealthComponent {
 
     override fun doHealthCheck(): HealthStatus = when (datasource.connection.isValid(timeout)) {
         true -> HEALTHY
-        false -> throw SQLTimeoutException("Could not connect to database")
+        false -> UNHEALTHY
     }
 
-    override fun handleFailure(throwable: Throwable) {
-    }
+    override fun handleFailure(throwable: Throwable) = Unit
 }

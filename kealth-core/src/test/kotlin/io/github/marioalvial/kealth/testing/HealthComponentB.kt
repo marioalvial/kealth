@@ -1,5 +1,6 @@
 package io.github.marioalvial.kealth.testing
 
+import io.github.marioalvial.kealth.core.CriticalLevel
 import io.github.marioalvial.kealth.core.HealthComponent
 import io.github.marioalvial.kealth.core.HealthStatus
 import kotlinx.coroutines.asContextElement
@@ -8,6 +9,7 @@ import kotlin.coroutines.CoroutineContext
 class HealthComponentB : HealthComponent {
 
     override val name = "component B"
+    override val criticalLevel = CriticalLevel.HIGH
     private val threadLocal = ThreadLocal<String>().apply { set("Thread Local $name") }
 
     override fun doHealthCheck(): HealthStatus {

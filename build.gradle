@@ -66,6 +66,11 @@ subprojects {
     signing {
         sign configurations.archives
     }
+
+    tasks.withType(Sign) {
+        onlyIf { gradle.taskGraph.hasTask("uploadArchives") }
+    }
+    
     publishing {
         publications {
             maven(MavenPublication) {

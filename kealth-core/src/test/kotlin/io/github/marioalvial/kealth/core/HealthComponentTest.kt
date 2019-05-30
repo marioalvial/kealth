@@ -22,6 +22,7 @@ class HealthComponentTest {
         val healthInfo = runBlocking { componentA.health() }
 
         assertThat(componentA.name).isEqualTo("component A")
+        assertThat(componentA.criticalLevel).isEqualTo("HIGH")
         assertThat(healthInfo.duration).isGreaterThanOrEqualTo(100).isLessThan(200)
         assertThat(healthInfo.status).isEqualTo(HEALTHY)
 
@@ -33,6 +34,7 @@ class HealthComponentTest {
         val healthInfo = runBlocking { componentB.health() }
 
         assertThat(componentB.name).isEqualTo("component B")
+        assertThat(componentB.criticalLevel).isEqualTo("HIGH")
         assertThat(healthInfo.duration).isGreaterThanOrEqualTo(200).isLessThan(300)
         assertThat(healthInfo.status).isEqualTo(UNHEALTHY)
 
@@ -44,6 +46,7 @@ class HealthComponentTest {
         val healthInfo = runBlocking { componentC.health() }
 
         assertThat(componentC.name).isEqualTo("component C")
+        assertThat(componentC.criticalLevel).isEqualTo("LOW")
         assertThat(healthInfo.duration).isGreaterThanOrEqualTo(300).isLessThan(400)
         assertThat(healthInfo.status).isEqualTo(UNHEALTHY)
 
@@ -55,6 +58,7 @@ class HealthComponentTest {
         val healthInfo = runBlocking { componentD.health() }
 
         assertThat(componentD.name).isEqualTo("component D")
+        assertThat(componentD.criticalLevel).isEqualTo("LOW")
         assertThat(healthInfo.duration).isGreaterThanOrEqualTo(400).isLessThan(500)
         assertThat(healthInfo.status).isEqualTo(HEALTHY)
 
@@ -66,6 +70,7 @@ class HealthComponentTest {
         val healthInfo = runBlocking { componentE.health() }
 
         assertThat(componentE.name).isEqualTo("component E")
+        assertThat(componentE.criticalLevel).isEqualTo("HIGH")
         assertThat(healthInfo.duration).isGreaterThanOrEqualTo(500).isLessThan(600)
         assertThat(healthInfo.status).isEqualTo(UNHEALTHY)
 

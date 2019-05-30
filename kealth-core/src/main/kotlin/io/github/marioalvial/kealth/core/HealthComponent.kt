@@ -12,10 +12,12 @@ import kotlin.coroutines.EmptyCoroutineContext
 /**
  * Interface that abstracts a health component.
  * @property name Name of health component
+ * @property criticalLevel Critical component level
  */
 interface HealthComponent {
 
     val name: String
+    val criticalLevel: String
 
     /**
      * Handle response of healthCheck() method
@@ -34,7 +36,7 @@ interface HealthComponent {
                     }
                 )
         }
-            .let { HealthInfo(it.first, it.second) }
+            .let { HealthInfo(it.first, criticalLevel, it.second) }
     }
 
     /**

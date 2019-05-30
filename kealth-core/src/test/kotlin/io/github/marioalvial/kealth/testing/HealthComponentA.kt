@@ -1,11 +1,13 @@
 package io.github.marioalvial.kealth.testing
 
+import io.github.marioalvial.kealth.core.CriticalLevel
 import io.github.marioalvial.kealth.core.HealthComponent
 import io.github.marioalvial.kealth.core.HealthStatus
 
 class HealthComponentA : HealthComponent {
 
     override val name = "component A"
+    override val criticalLevel = CriticalLevel.HIGH
 
     override fun doHealthCheck(): HealthStatus {
         println("Starting isHealth of component $name in thread ${Thread.currentThread().name}")
