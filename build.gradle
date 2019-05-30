@@ -68,7 +68,7 @@ subprojects {
     }
 
     tasks.withType(Sign) {
-        onlyIf { gradle.taskGraph.hasTask("uploadArchives") }
+        onlyIf { gradle.taskGraph.hasTask(":${project.name}:publish") }
     }
     
     publishing {
