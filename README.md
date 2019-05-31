@@ -51,6 +51,7 @@ dependencies {
 class HealthComponentA : HealthComponent {
 
     override val name = "component A"
+    override val criticalLevel = CriticalLevel.HIGH
 
     override fun doHealthCheck(): HealthStatus {
         val result = doHealthCheckCallToComponentAService()
@@ -81,10 +82,12 @@ val componentMap: Map<String, HealthInfo> = aggregator.aggregate()
 {
 	"component-A": {
 		"status": "HEALTHY",
+		"criticalLevel": "HIGH",
 		"duration": 1500
 	},
 	"component-B": {
 		"status": "UNHEALTHY",
+		"criticalLevel": "HIGH",
 		"duration": 400
 	}
 }
@@ -103,9 +106,9 @@ If the `doHealthCheck()` throws exception the component will trigger the `handle
 
 | Module                                                                                   | Description                              | Artifacts                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 | ---------------------------------------------------------------------------------------- | ---------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [kealth-core](kealth-core)                                                               | Core module                              | [![jar](https://img.shields.io/badge/jar-v1.0.9.1-green.svg)](https://search.maven.org/artifact/io.github.marioalvial/kealth-core/1.0.9.1/jar) [![javadoc](https://img.shields.io/badge/javadoc-v1.0.9.1-blue.svg)](https://search.maven.org/artifact/io.github.marioalvial/kealth-core/1.0.9.1/javadoc) [![sources](https://img.shields.io/badge/sources-v1.0.9.1-yellow.svg)](https://search.maven.org/artifact/io.github.marioalvial/kealth-core/1.0.9/sources)                                 |
-| [kealth-jdbc](kealth-jdbc)                                                               | Health Component for JDBC                | [![jar](https://img.shields.io/badge/jar-v1.0.9.1-green.svg)](https://search.maven.org/artifact/io.github.marioalvial/kealth-jdbc/1.0.9.1/jar) [![javadoc](https://img.shields.io/badge/javadoc-v1.0.9.1-blue.svg)](https://search.maven.org/artifact/io.github.marioalvial/kealth-jdbc/1.0.9.1/javadoc) [![sources](https://img.shields.io/badge/sources-v1.0.9.1-yellow.svg)](https://search.maven.org/artifact/io.github.marioalvial/kealth-jdbc/1.0.9/sources)                                 |
-| [kealth-http](kealth-http)                                                               | Health Component for HTTP Request        | [![jar](https://img.shields.io/badge/jar-v1.0.9.1-green.svg)](https://search.maven.org/artifact/io.github.marioalvial/kealth-http/1.0.9.1/jar) [![javadoc](https://img.shields.io/badge/javadoc-v1.0.9.1-blue.svg)](https://search.maven.org/artifact/io.github.marioalvial/kealth-http/1.0.9.1/javadoc) [![sources](https://img.shields.io/badge/sources-v1.0.9.1-yellow.svg)](https://search.maven.org/artifact/io.github.marioalvial/kealth-http/1.0.9/sources)                                 |
+| [kealth-core](kealth-core)                                                               | Core module                              | [![jar](https://img.shields.io/badge/jar-v1.0.9.2-green.svg)](https://search.maven.org/artifact/io.github.marioalvial/kealth-core/1.0.9.2/jar) [![javadoc](https://img.shields.io/badge/javadoc-v1.0.9.2-blue.svg)](https://search.maven.org/artifact/io.github.marioalvial/kealth-core/1.0.9.2/javadoc) [![sources](https://img.shields.io/badge/sources-v1.0.9.2-yellow.svg)](https://search.maven.org/artifact/io.github.marioalvial/kealth-core/1.0.9/sources)                                 |
+| [kealth-jdbc](kealth-jdbc)                                                               | Health Component for JDBC                | [![jar](https://img.shields.io/badge/jar-v1.0.9.2-green.svg)](https://search.maven.org/artifact/io.github.marioalvial/kealth-jdbc/1.0.9.2/jar) [![javadoc](https://img.shields.io/badge/javadoc-v1.0.9.2-blue.svg)](https://search.maven.org/artifact/io.github.marioalvial/kealth-jdbc/1.0.9.2/javadoc) [![sources](https://img.shields.io/badge/sources-v1.0.9.2-yellow.svg)](https://search.maven.org/artifact/io.github.marioalvial/kealth-jdbc/1.0.9/sources)                                 |
+| [kealth-http](kealth-http)                                                               | Health Component for HTTP Request        | [![jar](https://img.shields.io/badge/jar-v1.0.9.2-green.svg)](https://search.maven.org/artifact/io.github.marioalvial/kealth-http/1.0.9.2/jar) [![javadoc](https://img.shields.io/badge/javadoc-v1.0.9.2-blue.svg)](https://search.maven.org/artifact/io.github.marioalvial/kealth-http/1.0.9.2/javadoc) [![sources](https://img.shields.io/badge/sources-v1.0.9.2-yellow.svg)](https://search.maven.org/artifact/io.github.marioalvial/kealth-http/1.0.9/sources)                                 |
 
 ## Continuous Integration and Test Coverage
 
