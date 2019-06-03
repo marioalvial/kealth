@@ -139,4 +139,45 @@ class HealthAggregatorTest {
         assertThat(healthMap[componentC.name]?.duration)
             .isLessThan(healthMap[componentD.name]?.duration)
     }
+
+    @Test
+    fun `given filter by criticalLevel should only execute health method of components that matched the predicate`() {
+        val aggregator = HealthAggregator(listOf(componentD, componentB, componentC, componentE, componentA))
+
+        val healthMap = aggregator.aggregateWithFilter { _, criticalLevel -> CriticalLevel.HIGH == criticalLevel }
+
+        assertThat(healthMap.size).isEqualTo(3)
+
+        coVerify(exactly = 1) { componentB.health() }
+        coVerify(exactly = 1) { componentE.health() }
+        coVerify(exactly = 1) { componentA.health() }
+    }
+
+    @Test
+    fun `given filter by name should only execute health method of components that matched the predicate`() {
+        val aggregator = HealthAggregator(listOf(componentD, componentB, componentC, componentE, componentA))
+
+        val healthMap = aggregator.aggregateWithFilter { name, _ -> "component A" == name }
+
+        assertThat(healthMap.size).isEqualTo(1)
+
+        coVerify(exactly = 1) { componentA.health() }
+    }
+
+    @Test
+    fun `given filterBlock that matches nothing should not execute any health`() {
+        val aggregator = HealthAggregator(listOf(componentD, componentB, componentC, componentE, componentA))
+
+        val healthMap = aggregator.aggregateWithFilter { name, criticalLevel ->
+            name == "component A" && criticalLevel == CriticalLevel.MEDIUM
+        }
+
+        assertThat(healthMap.size).isEqualTo(0)
+
+        coVerify(exactly = 0) { componentA.health() }
+        coVerify(exactly = 0) { componentB.health() }
+        coVerify(exactly = 0) { componentC.health() }
+        coVerify(exactly = 0) { componentD.health() }
+        coVerify(exactly = 0) { componentE.health() }
+    }
 }

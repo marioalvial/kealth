@@ -1,3 +1,11 @@
+# 1.0.9.3
+> Published 3 June 2019
+
+#### Features:
+
+* Added `CriticalLevel.MEDIUM` constant
+* Added `aggregateWithFilter()` method in `HealthAggregator`
+
 # 1.0.9.2
 > Published 30 May 2019
 

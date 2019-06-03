@@ -16,11 +16,24 @@ class HealthAggregator(
 ) {
 
     /**
-     * Execute the health method of each health component and builds a map with component name and health status.
+     * Execute the health method of each health component and builds a map with component name and health information.
      * @return Map<String, HealthStatus>
      */
-    fun aggregate(): Map<String, HealthInfo> = runBlocking {
+    fun aggregate(): Map<String, HealthInfo> = executeAggregation(components)
+
+    /**
+     * Execute the health method of each component that matched the given predicate and builds a map with component's
+     * name and health information.
+     * @param filterBlock - Function that receive component's name and criticalLevel as parameter
+     * @return Map<String, HealthStatus>
+     */
+    fun aggregateWithFilter(filterBlock: (name: String, criticalLevel: String) -> Boolean) =
         components
+            .filter { filterBlock(it.name, it.criticalLevel) }
+            .let { executeAggregation(it) }
+
+    private fun executeAggregation(componentList: List<HealthComponent>) = runBlocking {
+        componentList
             .associate { it.name to async { it.health() } }
             .mapValues { it.value.await() }
     }

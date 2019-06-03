@@ -9,6 +9,10 @@ object CriticalLevel {
      */
     const val HIGH = "HIGH"
     /**
+     * Constant indicating that the component's critical level is medium
+     */
+    const val MEDIUM = "MEDIUM"
+    /**
      * Constant indicating that the component's critical level is low
      */
     const val LOW = "LOW"
