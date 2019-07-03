@@ -2,10 +2,8 @@ package io.github.marioalvial.kealth.core
 
 import io.github.marioalvial.kealth.core.HealthStatus.UNHEALTHY
 import io.github.marioalvial.kealth.extensions.measureTimeMillisAndReturn
+import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.Default
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
@@ -24,14 +22,15 @@ interface HealthComponent {
      * @return HealthStatus
      */
     suspend fun health(): HealthInfo {
-        val context = context()
+        val context = context() + Dispatchers.IO
 
         return measureTimeMillisAndReturn {
-            runCatching { withContext(Default + context) { doHealthCheck() } }
+            runCatching { withContext(context) { doHealthCheck() } }
                 .fold(
                     onSuccess = { it },
                     onFailure = {
-                        GlobalScope.launch(context) { handleFailure(it) }
+                        val job = GlobalScope.launch(context) { handleFailure(it) }
+                        job.invokeOnCompletion { runBlocking { job.join() } }
                         UNHEALTHY
                     }
                 )
