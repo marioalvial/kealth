@@ -4,6 +4,8 @@ import io.github.marioalvial.kealth.core.CriticalLevel
 import io.github.marioalvial.kealth.core.HealthStatus
 import io.mockk.every
 import io.mockk.spyk
+import io.mockk.just
+import io.mockk.Runs
 import io.mockk.verify
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
@@ -19,6 +21,7 @@ class JdbcHealthComponentTest {
     @Test
     fun `given valid connection with DB should execute validation successfully and return health info`() {
         every { datasource.connection.isValid(3) } returns true
+        every { datasource.connection.close() } just Runs
 
         val healthInfo = runBlocking { jdbcComponent.health() }
 
@@ -31,6 +34,7 @@ class JdbcHealthComponentTest {
     @Test
     fun `given invalid connection with DB should throw exception and execute handle failure`() {
         every { datasource.connection } throws SQLException()
+        every { datasource.connection.close() } just Runs
 
         val healthInfo = runBlocking { jdbcComponent.health() }
 
@@ -44,6 +48,7 @@ class JdbcHealthComponentTest {
     @Test
     fun `given invalid connection with DB returns false`() {
         every { datasource.connection.isValid(3) } returns false
+        every { datasource.connection.close() } just Runs
 
         val healthInfo = runBlocking { jdbcComponent.health() }
 

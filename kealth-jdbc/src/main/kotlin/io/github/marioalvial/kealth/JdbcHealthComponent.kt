@@ -19,9 +19,14 @@ class JdbcHealthComponent(
     private val timeout: Int = 3
 ) : HealthComponent {
 
-    override fun doHealthCheck(): HealthStatus = when (datasource.connection.isValid(timeout)) {
-        true -> HEALTHY
-        false -> UNHEALTHY
+    override fun doHealthCheck(): HealthStatus {
+        val connection = datasource.connection
+        val result = when (connection.isValid(timeout)) {
+            true -> HEALTHY
+            false -> UNHEALTHY
+        }
+        connection.close()
+        return result
     }
 
     override fun handleFailure(throwable: Throwable) = Unit
