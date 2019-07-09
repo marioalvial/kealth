@@ -1,3 +1,10 @@
+# 1.0.9.5
+> Published 9 July 2019
+
+#### Bugfix:
+
+* Close connection after jdbc component health check execution
+
 # 1.0.9.3
 > Published 3 June 2019
 
