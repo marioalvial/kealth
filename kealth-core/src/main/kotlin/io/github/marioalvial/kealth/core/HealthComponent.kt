@@ -67,7 +67,7 @@ abstract class HealthComponent {
      * @param coroutineContext CoroutineContext
      * @param exception Throwable
      */
-    abstract fun handleCoroutineException(coroutineContext: CoroutineContext, exception: Throwable)
+    open fun handleCoroutineException(coroutineContext: CoroutineContext, exception: Throwable) = Unit
 
     /**
      * If doHealthCheck() returns UNHEALTHY status executes handleUnhealthyStatus logic.
