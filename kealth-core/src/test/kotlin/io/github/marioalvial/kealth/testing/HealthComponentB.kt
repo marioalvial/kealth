@@ -6,11 +6,12 @@ import io.github.marioalvial.kealth.core.HealthStatus
 import kotlinx.coroutines.asContextElement
 import kotlin.coroutines.CoroutineContext
 
-class HealthComponentB : HealthComponent {
+class HealthComponentB : HealthComponent() {
 
     override val name = "component B"
     override val criticalLevel = CriticalLevel.HIGH
     private val threadLocal = ThreadLocal<String>().apply { set("Thread Local $name") }
+    override var componentContext: CoroutineContext = threadLocal.asContextElement()
 
     override fun doHealthCheck(): HealthStatus {
         println("Starting isHealth of component $name in thread ${Thread.currentThread().name}")
@@ -22,14 +23,19 @@ class HealthComponentB : HealthComponent {
         throw RuntimeException("$name throws exception")
     }
 
-    override fun handleFailure(throwable: Throwable) {
-        println("Starting handleFailure of $name in thread ${Thread.currentThread().name}")
+    override fun handleException(throwable: Throwable) {
+        println("Starting handleException of $name in thread ${Thread.currentThread().name}")
 
-        threadLocal.get() ?: throw RuntimeException()
-        Thread.sleep(200)
+        println(Thread.currentThread().name)
 
-        println("Finish handle failure of component $name - 200ms")
+        threadLocal.get() ?: throw RuntimeException("O SHARE DE CONTEXT FALHOU")
+
+        Thread.sleep(100)
+
+        println("Finish handle failure of component $name - 100ms")
     }
 
-    override fun context(): CoroutineContext = threadLocal.asContextElement()
+    override fun handleCoroutineException(coroutineContext: CoroutineContext, exception: Throwable) {
+        println("Coroutine throws exception with context $coroutineContext and error ${exception.printStackTrace()}")
+    }
 }

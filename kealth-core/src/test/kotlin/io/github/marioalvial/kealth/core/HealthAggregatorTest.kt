@@ -1,6 +1,10 @@
 package io.github.marioalvial.kealth.core
 
-import io.github.marioalvial.kealth.testing.*
+import io.github.marioalvial.kealth.testing.HealthComponentA
+import io.github.marioalvial.kealth.testing.HealthComponentB
+import io.github.marioalvial.kealth.testing.HealthComponentC
+import io.github.marioalvial.kealth.testing.HealthComponentD
+import io.github.marioalvial.kealth.testing.HealthComponentE
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.spyk
@@ -31,8 +35,8 @@ class HealthAggregatorTest {
 
         coVerify(exactly = 1) { componentA.health() }
         coVerify(exactly = 1) { componentD.health() }
-        coVerify(exactly = 0) { componentA.handleFailure(any()) }
-        coVerify(exactly = 0) { componentD.handleFailure(any()) }
+        coVerify(exactly = 0) { componentA.handleException(any()) }
+        coVerify(exactly = 0) { componentD.handleException(any()) }
     }
 
     @Test
@@ -47,8 +51,8 @@ class HealthAggregatorTest {
 
         coVerify(exactly = 1) { componentB.health() }
         coVerify(exactly = 1) { componentC.health() }
-        coVerify(exactly = 1) { componentB.handleFailure(any()) }
-        coVerify(exactly = 1) { componentC.handleFailure(any()) }
+        coVerify(exactly = 1) { componentB.handleException(any()) }
+        coVerify(exactly = 1) { componentC.handleException(any()) }
     }
 
     @Test
@@ -57,34 +61,32 @@ class HealthAggregatorTest {
 
         assertThatCode { aggregator.aggregate() }.doesNotThrowAnyException()
 
-        verify(exactly = 1) { componentB.handleFailure(any()) }
+        verify(exactly = 1) { componentB.handleException(any()) }
     }
 
     @Test
-    fun `given unhealthy components without thread context should execute handleFailure passing context`() {
+    fun `given unhealthy component without context should throw exception when trying to access threadLocal context`() {
         val aggregator = HealthAggregator(listOf(componentE))
 
         assertThatCode { aggregator.aggregate() }.doesNotThrowAnyException()
 
-        verify(exactly = 1) { componentE.handleFailure(any()) }
+        verify(exactly = 1) { componentE.handleException(any()) }
     }
 
     @Test
     fun `throwing exception during handleFailure() execution should not cancel handleFailure() of another component`() {
-        coEvery { componentB.doHealthCheck() } throws RuntimeException()
-        coEvery { componentB.handleFailure(any()) } throws RuntimeException()
-        coEvery { componentA.doHealthCheck() } throws RuntimeException()
-        coEvery { componentC.doHealthCheck() } throws RuntimeException()
-        coEvery { componentD.doHealthCheck() } throws RuntimeException()
+        coEvery { componentB.handleException(any()) } throws IllegalArgumentException("Something went veeeery wrong")
 
         HealthAggregator(listOf(componentA, componentB, componentC, componentD)).aggregate()
 
         runBlocking { delay(5000) }
 
-        coVerify(exactly = 1) { componentA.handleFailure(any()) }
-        coVerify(exactly = 1) { componentB.handleFailure(any()) }
-        coVerify(exactly = 1) { componentC.handleFailure(any()) }
-        coVerify(exactly = 1) { componentD.handleFailure(any()) }
+        coVerify(exactly = 1) { componentA.health() }
+        coVerify(exactly = 1) { componentB.health() }
+        coVerify(exactly = 1) { componentB.handleException(any()) }
+        coVerify(exactly = 1) { componentB.handleCoroutineException(any(), any()) }
+        coVerify(exactly = 1) { componentC.health() }
+        coVerify(exactly = 1) { componentD.health() }
     }
 
     @Test
@@ -101,10 +103,10 @@ class HealthAggregatorTest {
         coVerify(exactly = 1) { componentB.health() }
         coVerify(exactly = 1) { componentC.health() }
         coVerify(exactly = 1) { componentD.health() }
-        coVerify(exactly = 0) { componentA.handleFailure(any()) }
-        coVerify(exactly = 1) { componentB.handleFailure(any()) }
-        coVerify(exactly = 1) { componentC.handleFailure(any()) }
-        coVerify(exactly = 0) { componentD.handleFailure(any()) }
+        coVerify(exactly = 0) { componentA.handleException(any()) }
+        coVerify(exactly = 1) { componentB.handleException(any()) }
+        coVerify(exactly = 1) { componentC.handleException(any()) }
+        coVerify(exactly = 0) { componentD.handleException(any()) }
     }
 
     @Test

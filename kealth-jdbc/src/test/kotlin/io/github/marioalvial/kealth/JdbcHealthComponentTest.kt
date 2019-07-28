@@ -28,7 +28,7 @@ class JdbcHealthComponentTest {
         assertThat(jdbcComponent.name).isEqualTo("jdbc-component")
         assertThat(healthInfo.status).isEqualTo(HealthStatus.HEALTHY)
 
-        verify(exactly = 0) { jdbcComponent.handleFailure(any()) }
+        verify(exactly = 0) { jdbcComponent.handleException(any()) }
     }
 
     @Test
@@ -42,7 +42,7 @@ class JdbcHealthComponentTest {
         assertThat(jdbcComponent.criticalLevel).isEqualTo("LOW")
         assertThat(healthInfo.status).isEqualTo(HealthStatus.UNHEALTHY)
 
-        verify(exactly = 1) { jdbcComponent.handleFailure(any()) }
+        verify(exactly = 1) { jdbcComponent.handleException(any()) }
     }
 
     @Test
@@ -56,6 +56,6 @@ class JdbcHealthComponentTest {
         assertThat(jdbcComponent.criticalLevel).isEqualTo("LOW")
         assertThat(healthInfo.status).isEqualTo(HealthStatus.UNHEALTHY)
 
-        verify(exactly = 0) { jdbcComponent.handleFailure(any()) }
+        verify(exactly = 0) { jdbcComponent.handleException(any()) }
     }
 }

@@ -3,8 +3,9 @@ package io.github.marioalvial.kealth.testing
 import io.github.marioalvial.kealth.core.CriticalLevel
 import io.github.marioalvial.kealth.core.HealthComponent
 import io.github.marioalvial.kealth.core.HealthStatus
+import kotlin.coroutines.CoroutineContext
 
-class HealthComponentC : HealthComponent {
+class HealthComponentC : HealthComponent() {
 
     override val name = "component C"
     override val criticalLevel = CriticalLevel.LOW
@@ -19,11 +20,15 @@ class HealthComponentC : HealthComponent {
         throw RuntimeException("$name throws exception")
     }
 
-    override fun handleFailure(throwable: Throwable) {
-        println("Starting handleFailure of $name in thread ${Thread.currentThread().name}")
+    override fun handleException(throwable: Throwable) {
+        println("Starting handleException of $name in thread ${Thread.currentThread().name}")
 
         Thread.sleep(300)
 
         println("Finish handle failure of component $name - 300ms")
+    }
+
+    override fun handleCoroutineException(coroutineContext: CoroutineContext, exception: Throwable) {
+        println("Coroutine throws exception with context $coroutineContext and error ${exception.printStackTrace()}")
     }
 }

@@ -28,7 +28,7 @@ class HttpHealthComponentTest {
         assertThat(httpComponent.criticalLevel).isEqualTo("HIGH")
         assertThat(healthInfo.status).isEqualTo(HealthStatus.HEALTHY)
 
-        verify(exactly = 0) { httpComponent.handleFailure(any()) }
+        verify(exactly = 0) { httpComponent.handleException(any()) }
     }
 
     @Test
@@ -42,7 +42,7 @@ class HttpHealthComponentTest {
         assertThat(httpComponent.criticalLevel).isEqualTo("HIGH")
         assertThat(healthInfo.status).isEqualTo(HealthStatus.UNHEALTHY)
 
-        verify(exactly = 1) { httpComponent.handleFailure(any()) }
+        verify(exactly = 1) { httpComponent.handleException(any()) }
     }
 
     @Test
@@ -57,6 +57,6 @@ class HttpHealthComponentTest {
         assertThat(httpComponent.criticalLevel).isEqualTo("HIGH")
         assertThat(healthInfo.status).isEqualTo(HealthStatus.UNHEALTHY)
 
-        verify(exactly = 1) { httpComponent.handleFailure(any()) }
+        verify(exactly = 1) { httpComponent.handleException(any()) }
     }
 }

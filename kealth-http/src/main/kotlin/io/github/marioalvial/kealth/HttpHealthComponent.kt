@@ -7,6 +7,7 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.io.DataOutputStream
 import java.net.ConnectException
+import kotlin.coroutines.CoroutineContext
 
 /**
  * Class that executes health check of external dependency by HTTP request.
@@ -29,7 +30,7 @@ class HttpHealthComponent(
     private val parameters: Map<String, String> = emptyMap(),
     private val connectTimeout: Int = 3000,
     private val readTimeout: Int = 5000
-) : HealthComponent {
+) : HealthComponent() {
 
     override fun doHealthCheck(): HealthStatus {
         val connection = getConfiguredConnection()
@@ -69,5 +70,9 @@ class HttpHealthComponent(
         out.close()
     }
 
-    override fun handleFailure(throwable: Throwable) = Unit
+    override fun handleException(throwable: Throwable) = Unit
+
+    override fun handleCoroutineException(coroutineContext: CoroutineContext, exception: Throwable) {
+        println("Coroutine throws exception with context $coroutineContext and error ${exception.printStackTrace()}")
+    }
 }

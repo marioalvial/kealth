@@ -5,31 +5,41 @@ import io.github.marioalvial.kealth.core.HealthComponent
 import io.github.marioalvial.kealth.core.HealthStatus
 import kotlin.coroutines.CoroutineContext
 
-class HealthComponentE : HealthComponent() {
+class HealthComponentF : HealthComponent() {
 
-    override val name = "component E"
+    override val name = "component F"
     override val criticalLevel = CriticalLevel.HIGH
-    private val threadLocal = ThreadLocal<String>().apply { set("Thread Local $name") }
 
     override fun doHealthCheck(): HealthStatus {
         println("Starting isHealth of component $name in thread ${Thread.currentThread().name}")
 
-        Thread.sleep(500)
+        Thread.sleep(350)
 
-        val info = threadLocal.get() ?: throw IllegalAccessException("You can't access thread local")
+        addParameter("info", "Birds can fly")
 
-        println(info)
-        println("Finish isHealth of component $name - 500ms")
+        println("Finish isHealth of component $name - 350ms")
 
-        return HealthStatus.HEALTHY
+        return HealthStatus.UNHEALTHY
     }
 
     override fun handleException(throwable: Throwable) {
         println("Starting handleException of $name")
 
-        Thread.sleep(500)
+        Thread.sleep(350)
 
-        println("Finish handle failure of component $name - 500ms")
+        println("Finish handle failure of component $name - 350ms")
+    }
+
+    override fun handleUnhealthyStatus() {
+        println("Starting handleUnhealthyStatus of $name")
+
+        val coreInformation = parameters()["info"] ?: throw IllegalArgumentException("Key does not exist")
+
+        println("Printing core information for debugging: $coreInformation")
+
+        Thread.sleep(350)
+
+        println("Finish handleUnhealthyStatus of component $name - 350ms")
     }
 
     override fun handleCoroutineException(coroutineContext: CoroutineContext, exception: Throwable) {

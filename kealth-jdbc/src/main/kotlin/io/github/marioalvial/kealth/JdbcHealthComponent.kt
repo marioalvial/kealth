@@ -5,6 +5,7 @@ import io.github.marioalvial.kealth.core.HealthStatus
 import io.github.marioalvial.kealth.core.HealthStatus.HEALTHY
 import io.github.marioalvial.kealth.core.HealthStatus.UNHEALTHY
 import javax.sql.DataSource
+import kotlin.coroutines.CoroutineContext
 
 /**
  * Class that executes health check of the database connection.
@@ -17,7 +18,7 @@ class JdbcHealthComponent(
     override val criticalLevel: String,
     private val datasource: DataSource,
     private val timeout: Int = 3
-) : HealthComponent {
+) : HealthComponent() {
 
     override fun doHealthCheck(): HealthStatus {
         val connection = datasource.connection
@@ -29,5 +30,9 @@ class JdbcHealthComponent(
         return result
     }
 
-    override fun handleFailure(throwable: Throwable) = Unit
+    override fun handleException(throwable: Throwable) = Unit
+
+    override fun handleCoroutineException(coroutineContext: CoroutineContext, exception: Throwable) {
+        println("Coroutine throws exception with context $coroutineContext and error ${exception.printStackTrace()}")
+    }
 }
