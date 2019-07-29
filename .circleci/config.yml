@@ -1,12 +1,32 @@
 version: 2.1
 
+commands:
+  build_project:
+    description: "Execute project tests and build jar"
+    steps:
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "build.gradle" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+      - run: ./gradlew dependencies
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: v1-dependencies-{{ checksum "build.gradle" }}
+      - run: ./gradlew clean build
+      - store_test_results:
+          path: /home/circleci/kealth/build/test-results/test
+      - store_artifacts:
+          path: /home/circleci/kealth/build/reports/tests
+
 jobs:
   build:
     docker:
       - image: circleci/openjdk:8
     steps:
       - checkout
-      - run: ./gradlew clean build
+      - build_project
       - run:
           name: Code coverage
           command: |
