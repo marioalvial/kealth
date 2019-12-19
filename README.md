@@ -129,10 +129,10 @@ This method has a default implementation that can be override anytime.
 
 You can share some context from thread to any scope that is running your coroutine. Just override context val.
 
-```kotlin`
+```kotlin
 private val threadLocal = ThreadLocal<String>().apply { set("Thread Local $name") }
 override var context: CoroutineContext = threadLocal.asContextElement()
-``
+```
 
 ## How it works
 
