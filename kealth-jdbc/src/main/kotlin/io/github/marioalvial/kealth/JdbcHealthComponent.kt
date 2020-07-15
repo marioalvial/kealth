@@ -30,9 +30,5 @@ class JdbcHealthComponent(
         return result
     }
 
-    override fun handleException(throwable: Throwable) = Unit
-
-    override fun handleCoroutineException(coroutineContext: CoroutineContext, exception: Throwable) {
-        println("Coroutine throws exception with context $coroutineContext and error ${exception.printStackTrace()}")
-    }
+    override fun handleFailure(throwable: Throwable) = Unit
 }

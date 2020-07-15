@@ -7,7 +7,6 @@ import io.github.marioalvial.kealth.testing.HealthComponentB
 import io.github.marioalvial.kealth.testing.HealthComponentC
 import io.github.marioalvial.kealth.testing.HealthComponentD
 import io.github.marioalvial.kealth.testing.HealthComponentE
-import io.github.marioalvial.kealth.testing.HealthComponentF
 import io.mockk.spyk
 import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
@@ -24,7 +23,6 @@ class HealthComponentTest {
     private val componentC = spyk(HealthComponentC())
     private val componentD = spyk(HealthComponentD())
     private val componentE = spyk(HealthComponentE())
-    private val componentF = spyk(HealthComponentF())
 
     @Test
     fun `when execute health method of component A should execute successfully and return health info`() {
@@ -35,7 +33,7 @@ class HealthComponentTest {
         assertThat(healthInfo.duration).isGreaterThanOrEqualTo(100)
         assertThat(healthInfo.status).isEqualTo(HEALTHY)
 
-        verify(exactly = 0) { componentA.handleException(any()) }
+        verify(exactly = 0) { componentA.handleFailure(any()) }
     }
 
     @Test
@@ -47,14 +45,14 @@ class HealthComponentTest {
         assertThat(healthInfo.duration).isGreaterThanOrEqualTo(200)
         assertThat(healthInfo.status).isEqualTo(UNHEALTHY)
 
-        verify(exactly = 1) { componentB.handleException(any()) }
+        verify(exactly = 1) { componentB.handleFailure(any()) }
     }
 
     @Test
     fun `when execute health method of component B should be able to access threadLocal context`() {
         assertThatCode { runBlocking { withContext(Dispatchers.IO) { componentB.health() } } }.doesNotThrowAnyException()
 
-        verify(exactly = 1) { componentB.handleException(any()) }
+        verify(exactly = 1) { componentB.handleFailure(any()) }
     }
 
     @Test
@@ -66,7 +64,7 @@ class HealthComponentTest {
         assertThat(healthInfo.duration).isGreaterThanOrEqualTo(300)
         assertThat(healthInfo.status).isEqualTo(UNHEALTHY)
 
-        verify(exactly = 1) { componentC.handleException(any()) }
+        verify(exactly = 1) { componentC.handleFailure(any()) }
     }
 
     @Test
@@ -78,7 +76,7 @@ class HealthComponentTest {
         assertThat(healthInfo.duration).isGreaterThanOrEqualTo(400)
         assertThat(healthInfo.status).isEqualTo(HEALTHY)
 
-        verify(exactly = 0) { componentD.handleException(any()) }
+        verify(exactly = 0) { componentD.handleFailure(any()) }
     }
 
     @Test
@@ -90,18 +88,6 @@ class HealthComponentTest {
         assertThat(healthInfo.duration).isGreaterThanOrEqualTo(500)
         assertThat(healthInfo.status).isEqualTo(UNHEALTHY)
 
-        verify(exactly = 1) { componentE.handleException(any()) }
-    }
-
-    @Test
-    fun `when execute health method of component F should execute handleUnhealthyStatus()`() {
-        val healthInfo = runBlocking { componentF.health() }
-
-        assertThat(componentF.name).isEqualTo("component F")
-        assertThat(componentF.criticalLevel).isEqualTo("HIGH")
-        assertThat(healthInfo.duration).isGreaterThan(350)
-        assertThat(healthInfo.status).isEqualTo(UNHEALTHY)
-
-        verify(exactly = 1) { componentF.handleUnhealthyStatus() }
+        verify(exactly = 1) { componentE.handleFailure(any()) }
     }
 }

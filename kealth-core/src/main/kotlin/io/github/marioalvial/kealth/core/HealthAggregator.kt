@@ -3,6 +3,7 @@ package io.github.marioalvial.kealth.core
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.channels.produce
 import kotlinx.coroutines.runBlocking
 
 /**
@@ -23,7 +24,7 @@ class HealthAggregator(
      * Execute the health method of each health component and builds a map with component name and health information.
      * @return Map<String, HealthStatus>
      */
-    fun aggregate(): Map<String, HealthInfo> = executeAggregation(components)
+    fun aggregate(): List<HealthComponentResult> = executeAggregation(components)
 
     /**
      * Execute the health method of each component that matched the given predicate and builds a map with component's
@@ -31,12 +32,13 @@ class HealthAggregator(
      * @param filterBlock - Function that receive component's name and criticalLevel as parameter
      * @return Map<String, HealthStatus>
      */
-    fun aggregateWithFilter(filterBlock: (name: String, criticalLevel: String) -> Boolean): Map<String, HealthInfo> =
-        components
-            .filter { filterBlock(it.name, it.criticalLevel) }
-            .let { executeAggregation(it) }
+    fun aggregateWithFilter(
+        filterBlock: (name: String, criticalLevel: String) -> Boolean
+    ): List<HealthComponentResult> = components
+        .filter { filterBlock(it.name, it.criticalLevel) }
+        .let { executeAggregation(it) }
 
-    private fun executeAggregation(componentList: List<HealthComponent>): Map<String, HealthInfo> = componentList
+    private fun executeAggregation(componentList: List<HealthComponent>): List<HealthComponentResult> = componentList
         .associate { it.name to applicationScope.async { it.health() } }
-        .mapValues { runBlocking { it.value.await() } }
+        .map { HealthComponentResult.create(it.key, runBlocking { it.value.await() }) }
 }

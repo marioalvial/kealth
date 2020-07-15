@@ -20,15 +20,11 @@ class HealthComponentA : HealthComponent() {
         return HealthStatus.HEALTHY
     }
 
-    override fun handleException(throwable: Throwable) {
-            println("Starting handleException of component $name in thread ${Thread.currentThread().name}")
+    override fun handleFailure(throwable: Throwable) {
+        println("Starting handleException of component $name in thread ${Thread.currentThread().name}")
 
-            Thread.sleep(100)
+        Thread.sleep(100)
 
-            println("Finish handle failure of component $name - 100ms")
-    }
-
-    override fun handleCoroutineException(coroutineContext: CoroutineContext, exception: Throwable) {
-        println("Coroutine throws exception with context $coroutineContext and error ${exception.printStackTrace()}")
+        println("Finish handle failure of component $name - 100ms")
     }
 }

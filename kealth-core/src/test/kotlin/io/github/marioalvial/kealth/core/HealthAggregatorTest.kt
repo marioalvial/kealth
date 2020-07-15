@@ -24,35 +24,35 @@ class HealthAggregatorTest {
     private val componentE = spyk<HealthComponentE>()
 
     @Test
-    fun `given health components should return only healthy status`() {
+    fun `given healthy components should return only healthy status`() {
         val aggregator = HealthAggregator(listOf(componentD, componentA))
 
-        val healthMap = aggregator.aggregate()
+        val results = aggregator.aggregate()
 
-        assertThat(healthMap).hasSize(2)
-        assertThat(healthMap.values).allMatch { it.status == HealthStatus.HEALTHY }
-        assertThat(healthMap[componentD.name]?.duration).isGreaterThan(healthMap[componentA.name]?.duration)
+        assertThat(results)
+            .hasSize(2)
+            .allMatch { it.status == HealthStatus.HEALTHY }
 
         coVerify(exactly = 1) { componentA.health() }
         coVerify(exactly = 1) { componentD.health() }
-        coVerify(exactly = 0) { componentA.handleException(any()) }
-        coVerify(exactly = 0) { componentD.handleException(any()) }
+        coVerify(exactly = 0) { componentA.handleFailure(any()) }
+        coVerify(exactly = 0) { componentD.handleFailure(any()) }
     }
 
     @Test
     fun `given unhealthy components should return only unhealthy status`() {
         val aggregator = HealthAggregator(listOf(componentC, componentB))
 
-        val healthMap = aggregator.aggregate()
+        val results = aggregator.aggregate()
 
-        assertThat(healthMap).hasSize(2)
-        assertThat(healthMap.values).allMatch { it.status == HealthStatus.UNHEALTHY }
-        assertThat(healthMap[componentC.name]?.duration).isGreaterThan(healthMap[componentB.name]?.duration)
+        assertThat(results)
+            .hasSize(2)
+            .allMatch { it.status == HealthStatus.UNHEALTHY }
 
         coVerify(exactly = 1) { componentB.health() }
         coVerify(exactly = 1) { componentC.health() }
-        coVerify(exactly = 1) { componentB.handleException(any()) }
-        coVerify(exactly = 1) { componentC.handleException(any()) }
+        coVerify(exactly = 1) { componentB.handleFailure(any()) }
+        coVerify(exactly = 1) { componentC.handleFailure(any()) }
     }
 
     @Test
@@ -61,7 +61,7 @@ class HealthAggregatorTest {
 
         assertThatCode { aggregator.aggregate() }.doesNotThrowAnyException()
 
-        verify(exactly = 1) { componentB.handleException(any()) }
+        verify(exactly = 1) { componentB.handleFailure(any()) }
     }
 
     @Test
@@ -70,12 +70,12 @@ class HealthAggregatorTest {
 
         assertThatCode { aggregator.aggregate() }.doesNotThrowAnyException()
 
-        verify(exactly = 1) { componentE.handleException(any()) }
+        verify(exactly = 1) { componentE.handleFailure(any()) }
     }
 
     @Test
     fun `throwing exception during handleFailure() execution should not cancel handleFailure() of another component`() {
-        coEvery { componentB.handleException(any()) } throws IllegalArgumentException("Something went veeeery wrong")
+        coEvery { componentB.handleFailure(any()) } throws IllegalArgumentException("Something went veeeery wrong")
 
         HealthAggregator(listOf(componentA, componentB, componentC, componentD)).aggregate()
 
@@ -83,8 +83,7 @@ class HealthAggregatorTest {
 
         coVerify(exactly = 1) { componentA.health() }
         coVerify(exactly = 1) { componentB.health() }
-        coVerify(exactly = 1) { componentB.handleException(any()) }
-        coVerify(exactly = 1) { componentB.handleCoroutineException(any(), any()) }
+        coVerify(exactly = 1) { componentB.handleFailure(any()) }
         coVerify(exactly = 1) { componentC.health() }
         coVerify(exactly = 1) { componentD.health() }
     }
@@ -93,62 +92,30 @@ class HealthAggregatorTest {
     fun `given unhealthy and healthy components should return healthy and unhealthy status`() {
         val aggregator = HealthAggregator(listOf(componentD, componentB, componentA, componentC))
 
-        val healthMap = aggregator.aggregate()
+        val results = aggregator.aggregate()
 
-        assertThat(healthMap).hasSize(4)
-        assertThat(healthMap.values).filteredOn { it.status == HealthStatus.HEALTHY }.hasSize(2)
-        assertThat(healthMap.values).filteredOn { it.status == HealthStatus.UNHEALTHY }.hasSize(2)
+        assertThat(results)
+            .hasSize(4)
+            .filteredOn { it.status == HealthStatus.HEALTHY }.hasSize(2)
+            .filteredOn { it.status == HealthStatus.UNHEALTHY }.hasSize(2)
 
         coVerify(exactly = 1) { componentA.health() }
         coVerify(exactly = 1) { componentB.health() }
         coVerify(exactly = 1) { componentC.health() }
         coVerify(exactly = 1) { componentD.health() }
-        coVerify(exactly = 0) { componentA.handleException(any()) }
-        coVerify(exactly = 1) { componentB.handleException(any()) }
-        coVerify(exactly = 1) { componentC.handleException(any()) }
-        coVerify(exactly = 0) { componentD.handleException(any()) }
-    }
-
-    @Test
-    fun `given healthMap assert that component A duration is less than all others components`() {
-        val aggregator = HealthAggregator(listOf(componentD, componentB, componentA, componentC))
-
-        val healthMap = aggregator.aggregate()
-
-        assertThat(healthMap[componentA.name]?.duration)
-            .isLessThan(healthMap[componentB.name]?.duration)
-            .isLessThan(healthMap[componentC.name]?.duration)
-            .isLessThan(healthMap[componentD.name]?.duration)
-    }
-
-    @Test
-    fun `given healthMap assert that component B duration is less than all others components`() {
-        val aggregator = HealthAggregator(listOf(componentD, componentB, componentC))
-
-        val healthMap = aggregator.aggregate()
-
-        assertThat(healthMap[componentB.name]?.duration)
-            .isLessThan(healthMap[componentC.name]?.duration)
-            .isLessThan(healthMap[componentD.name]?.duration)
-    }
-
-    @Test
-    fun `given healthMap assert that component C duration is less than all others components`() {
-        val aggregator = HealthAggregator(listOf(componentD, componentB, componentC))
-
-        val healthMap = aggregator.aggregate()
-
-        assertThat(healthMap[componentC.name]?.duration)
-            .isLessThan(healthMap[componentD.name]?.duration)
+        coVerify(exactly = 0) { componentA.handleFailure(any()) }
+        coVerify(exactly = 1) { componentB.handleFailure(any()) }
+        coVerify(exactly = 1) { componentC.handleFailure(any()) }
+        coVerify(exactly = 0) { componentD.handleFailure(any()) }
     }
 
     @Test
     fun `given filter by criticalLevel should only execute health method of components that matched the predicate`() {
         val aggregator = HealthAggregator(listOf(componentD, componentB, componentC, componentE, componentA))
 
-        val healthMap = aggregator.aggregateWithFilter { _, criticalLevel -> CriticalLevel.HIGH == criticalLevel }
+        val results = aggregator.aggregateWithFilter { _, criticalLevel -> CriticalLevel.HIGH == criticalLevel }
 
-        assertThat(healthMap.size).isEqualTo(3)
+        assertThat(results.size).isEqualTo(3)
 
         coVerify(exactly = 1) { componentB.health() }
         coVerify(exactly = 1) { componentE.health() }
@@ -159,9 +126,9 @@ class HealthAggregatorTest {
     fun `given filter by name should only execute health method of components that matched the predicate`() {
         val aggregator = HealthAggregator(listOf(componentD, componentB, componentC, componentE, componentA))
 
-        val healthMap = aggregator.aggregateWithFilter { name, _ -> "component A" == name }
+        val results = aggregator.aggregateWithFilter { name, _ -> "component A" == name }
 
-        assertThat(healthMap.size).isEqualTo(1)
+        assertThat(results.size).isEqualTo(1)
 
         coVerify(exactly = 1) { componentA.health() }
     }
@@ -170,11 +137,11 @@ class HealthAggregatorTest {
     fun `given filterBlock that matches nothing should not execute any health`() {
         val aggregator = HealthAggregator(listOf(componentD, componentB, componentC, componentE, componentA))
 
-        val healthMap = aggregator.aggregateWithFilter { name, criticalLevel ->
+        val results = aggregator.aggregateWithFilter { name, criticalLevel ->
             name == "component A" && criticalLevel == CriticalLevel.MEDIUM
         }
 
-        assertThat(healthMap.size).isEqualTo(0)
+        assertThat(results.size).isEqualTo(0)
 
         coVerify(exactly = 0) { componentA.health() }
         coVerify(exactly = 0) { componentB.health() }
