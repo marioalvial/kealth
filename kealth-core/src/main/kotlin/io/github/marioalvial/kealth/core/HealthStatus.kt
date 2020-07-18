@@ -8,6 +8,7 @@ enum class HealthStatus {
      * Status indicating that the component is healthy
      */
     HEALTHY,
+
     /**
      * Status indicating that the component is unhealthy
      */

@@ -3,7 +3,6 @@ package io.github.marioalvial.kealth.core
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
-import kotlinx.coroutines.channels.produce
 import kotlinx.coroutines.runBlocking
 
 /**

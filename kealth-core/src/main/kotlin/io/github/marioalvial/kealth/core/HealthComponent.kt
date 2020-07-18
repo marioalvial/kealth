@@ -16,17 +16,37 @@ abstract class HealthComponent {
 
     abstract val name: String
     abstract val criticalLevel: String
-    open var componentContext: CoroutineContext = EmptyCoroutineContext
+    protected open var componentContext: CoroutineContext = EmptyCoroutineContext
+
+    /**
+     * Executes Component Health Check
+     */
+    protected abstract fun healthCheck(): HealthStatus
+
+    /**
+     * If doHealthCheck() throws exception executes `handleFailure()` logic.
+     * @param throwable Throwable
+     */
+    protected open fun handleFailure(throwable: Throwable) = Unit
+
+    /**
+     * If doHealthCheck() returns HealthStatus.UNHEALTHY executes `handleUnhealthy()` logic.
+     */
+    protected open fun handleUnhealthy() = Unit
 
     /**
      * Handle response of `healthCheck()` method
      * @return HealthStatus
      */
     suspend fun health(): HealthInfo = measureTimeMillisAndReturn {
-        withContext(componentContext) {
-            runCatching { doHealthCheck() }
+        val context = componentContext
+
+        withContext(context) {
+            runCatching { healthCheck() }
                 .fold(
                     onSuccess = {
+                        if (it == HealthStatus.UNHEALTHY) launch { handleUnhealthy() }
+
                         it
                     },
                     onFailure = {
@@ -37,12 +57,4 @@ abstract class HealthComponent {
                 )
         }
     }.let { HealthInfo(it.first, criticalLevel, it.second) }
-
-    /**
-     * If doHealthCheck() throws exception executes `handleFailure()` logic.
-     * @param throwable Throwable
-     */
-    abstract fun handleFailure(throwable: Throwable)
-
-    protected abstract fun doHealthCheck(): HealthStatus
 }

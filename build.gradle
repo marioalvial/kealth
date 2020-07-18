@@ -4,7 +4,6 @@ plugins {
     id 'maven-publish'
     id 'org.jmailen.kotlinter' version '1.25.1'
     id 'signing'
-    id 'jacoco'
 }
 
 allprojects {
@@ -18,14 +17,13 @@ subprojects {
     apply {
         plugin("kotlin")
         plugin("signing")
-        plugin("jacoco")
         plugin("maven-publish")
         plugin("org.jetbrains.dokka")
         plugin("org.jmailen.kotlinter")
     }
     ext {
-        sonatype_username = project.properties['sonatype_username'] ?: ""
-        sonatype_password = project.properties['sonatype_password'] ?: ""
+        sonatype_username = System.getenv('SONATYPE_USERNAME') ?: ""
+        sonatype_password = System.getenv('SONATYPE_PASSWORD') ?: ""
     }
 
     compileKotlin {
@@ -42,7 +40,6 @@ subprojects {
     }
     test {
         testLogging.showStandardStreams = true
-        finalizedBy jacocoTestReport
     }
     dokka {
         outputFormat = 'html'
@@ -70,7 +67,7 @@ subprojects {
     tasks.withType(Sign) {
         onlyIf { gradle.taskGraph.hasTask(":${project.name}:publish") }
     }
-    
+
     publishing {
         publications {
             maven(MavenPublication) {
@@ -159,45 +156,5 @@ subprojects {
         reporters = ['checkstyle', 'plain']
         experimentalRules = false
         fileBatchSize = 30
-    }
-    jacocoTestReport {
-        additionalSourceDirs = files(sourceSets.main.allSource.srcDirs)
-        sourceDirectories = files(sourceSets.main.allSource.srcDirs)
-        classDirectories =  files(sourceSets.main.output)
-
-        reports {
-            html.enabled = true
-            xml.enabled = true
-            csv.enabled = false
-        }
-    }
-}
-
-jacoco {
-    toolVersion = '0.8.3'
-}
-
-task('jacocoRootReport', type: JacocoReport) {
-    dependsOn = subprojects.test
-
-    additionalSourceDirs = files(subprojects.sourceSets.main.allSource.srcDirs)
-    sourceDirectories = files(subprojects.sourceSets.main.allSource.srcDirs)
-    classDirectories =  files(subprojects.sourceSets.main.output)
-    executionData = files(subprojects.jacocoTestReport.executionData)
-
-    reports {
-        html.enabled = true
-        xml.enabled = true
-        csv.enabled = false
-    }
-}
-
-jacocoTestCoverageVerification {
-    violationRules {
-        rule {
-            limit {
-                minimum = 0.60
-            }
-        }
     }
 }

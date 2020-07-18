@@ -2,92 +2,67 @@ package io.github.marioalvial.kealth.core
 
 import io.github.marioalvial.kealth.core.HealthStatus.HEALTHY
 import io.github.marioalvial.kealth.core.HealthStatus.UNHEALTHY
-import io.github.marioalvial.kealth.testing.HealthComponentA
-import io.github.marioalvial.kealth.testing.HealthComponentB
-import io.github.marioalvial.kealth.testing.HealthComponentC
-import io.github.marioalvial.kealth.testing.HealthComponentD
-import io.github.marioalvial.kealth.testing.HealthComponentE
+import io.github.marioalvial.kealth.testing.FirstHealthComponent
+import io.github.marioalvial.kealth.testing.SecondComponent
+import io.github.marioalvial.kealth.testing.ThirdHealthComponent
+import io.github.marioalvial.kealth.testing.FourthHealthComponent
+import io.github.marioalvial.kealth.testing.Stub
+import io.mockk.Runs
+import io.mockk.every
+import io.mockk.just
+import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.verify
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
 import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.assertThatCode
 import org.junit.Test
 
 class HealthComponentTest {
 
-    private val componentA = spyk(HealthComponentA())
-    private val componentB = spyk(HealthComponentB())
-    private val componentC = spyk(HealthComponentC())
-    private val componentD = spyk(HealthComponentD())
-    private val componentE = spyk(HealthComponentE())
+    private val first = spyk(FirstHealthComponent())
+    private val second = spyk(SecondComponent())
+    private val stub = mockk<Stub>()
+    private val third = spyk(ThirdHealthComponent(stub))
+    private val fourth = spyk(FourthHealthComponent(stub))
 
     @Test
-    fun `when execute health method of component A should execute successfully and return health info`() {
-        val healthInfo = runBlocking { componentA.health() }
+    fun `when healthCheck returns HEALTHY should not execute any fallback function`() {
+        val expectedHealthInfo = HealthInfo(HEALTHY, CriticalLevel.HIGH, 0)
+        val healthInfo = runBlocking { first.health() }
 
-        assertThat(componentA.name).isEqualTo("component A")
-        assertThat(componentA.criticalLevel).isEqualTo("HIGH")
-        assertThat(healthInfo.duration).isGreaterThanOrEqualTo(100)
-        assertThat(healthInfo.status).isEqualTo(HEALTHY)
-
-        verify(exactly = 0) { componentA.handleFailure(any()) }
+        assertThat(healthInfo).isEqualToIgnoringGivenFields(expectedHealthInfo, "duration")
     }
 
     @Test
-    fun `when execute health method of component B should throw exception`() {
-        val healthInfo = runBlocking { componentB.health() }
+    fun `given context the health component should be able to access it`() {
+        val expectedHealthInfo = HealthInfo(HEALTHY, CriticalLevel.HIGH, 0)
+        val healthInfo = runBlocking { second.health() }
 
-        assertThat(componentB.name).isEqualTo("component B")
-        assertThat(componentB.criticalLevel).isEqualTo("HIGH")
-        assertThat(healthInfo.duration).isGreaterThanOrEqualTo(200)
-        assertThat(healthInfo.status).isEqualTo(UNHEALTHY)
-
-        verify(exactly = 1) { componentB.handleFailure(any()) }
+        assertThat(healthInfo).isEqualToIgnoringGivenFields(expectedHealthInfo, "duration")
     }
 
     @Test
-    fun `when execute health method of component B should be able to access threadLocal context`() {
-        assertThatCode { runBlocking { withContext(Dispatchers.IO) { componentB.health() } } }.doesNotThrowAnyException()
+    fun `given unhealthy status the component should executes handleUnhealthy logic`() {
+        val expectedHealthInfo = HealthInfo(UNHEALTHY, CriticalLevel.LOW, 0)
 
-        verify(exactly = 1) { componentB.handleFailure(any()) }
+        every { stub.nothing() } just Runs
+
+        val healthInfo = runBlocking { third.health() }
+
+        assertThat(healthInfo).isEqualToIgnoringGivenFields(expectedHealthInfo, "duration")
+        verify(exactly = 1) { stub.nothing() }
     }
 
     @Test
-    fun `when execute health method of component C should throw exception`() {
-        val healthInfo = runBlocking { componentC.health() }
+    fun `when healthCheck function throws exception should executes handleFailure logic`() {
+        val expectedHealthInfo = HealthInfo(UNHEALTHY, CriticalLevel.MEDIUM, 0)
 
-        assertThat(componentC.name).isEqualTo("component C")
-        assertThat(componentC.criticalLevel).isEqualTo("LOW")
-        assertThat(healthInfo.duration).isGreaterThanOrEqualTo(300)
-        assertThat(healthInfo.status).isEqualTo(UNHEALTHY)
+        every { stub.nothing() } just Runs
 
-        verify(exactly = 1) { componentC.handleFailure(any()) }
-    }
+        val healthInfo = runBlocking { fourth.health() }
 
-    @Test
-    fun `when execute health method of component D should execute successfully and return health info`() {
-        val healthInfo = runBlocking { componentD.health() }
+        assertThat(healthInfo).isEqualToIgnoringGivenFields(expectedHealthInfo, "duration")
 
-        assertThat(componentD.name).isEqualTo("component D")
-        assertThat(componentD.criticalLevel).isEqualTo("LOW")
-        assertThat(healthInfo.duration).isGreaterThanOrEqualTo(400)
-        assertThat(healthInfo.status).isEqualTo(HEALTHY)
-
-        verify(exactly = 0) { componentD.handleFailure(any()) }
-    }
-
-    @Test
-    fun `when execute health method of component E should throw exception`() {
-        val healthInfo = runBlocking { withContext(Dispatchers.Default) { componentE.health() } }
-
-        assertThat(componentE.name).isEqualTo("component E")
-        assertThat(componentE.criticalLevel).isEqualTo("HIGH")
-        assertThat(healthInfo.duration).isGreaterThanOrEqualTo(500)
-        assertThat(healthInfo.status).isEqualTo(UNHEALTHY)
-
-        verify(exactly = 1) { componentE.handleFailure(any()) }
+        verify(exactly = 1) { stub.nothing() }
     }
 }

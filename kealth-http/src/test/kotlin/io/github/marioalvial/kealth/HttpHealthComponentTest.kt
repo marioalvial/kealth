@@ -1,10 +1,10 @@
 package io.github.marioalvial.kealth
 
 import io.github.marioalvial.kealth.core.CriticalLevel
+import io.github.marioalvial.kealth.core.HealthInfo
 import io.github.marioalvial.kealth.core.HealthStatus
 import io.mockk.every
 import io.mockk.spyk
-import io.mockk.verify
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
@@ -19,44 +19,23 @@ class HttpHealthComponentTest {
     @Test
     fun `given valid connection attributes should execute validation successfully and return health info`() {
         val httpComponent = spyk(HttpHealthComponent(name, CriticalLevel.HIGH, url, method), recordPrivateCalls = true)
+        val expectedHealthInfo = HealthInfo(HealthStatus.HEALTHY, CriticalLevel.HIGH, 0)
 
         every { httpComponent invoke "execute" withArguments listOf(any<HttpURLConnection>()) } returns 200
 
         val healthInfo = runBlocking { httpComponent.health() }
 
-        assertThat(httpComponent.name).isEqualTo("http-component")
-        assertThat(httpComponent.criticalLevel).isEqualTo("HIGH")
-        assertThat(healthInfo.status).isEqualTo(HealthStatus.HEALTHY)
-
-        verify(exactly = 0) { httpComponent.handleFailure(any()) }
+        assertThat(healthInfo).isEqualToIgnoringGivenFields(expectedHealthInfo, "duration")
     }
 
     @Test
     fun `given invalid url should return UNHEALTHY status`() {
         val url = "https://jdasuhjdsoasdajoasd.com"
+        val expectedHealthInfo = HealthInfo(HealthStatus.UNHEALTHY, CriticalLevel.HIGH, 0)
         val httpComponent = spyk(HttpHealthComponent(name, CriticalLevel.HIGH, url, method), recordPrivateCalls = true)
 
         val healthInfo = runBlocking { httpComponent.health() }
 
-        assertThat(httpComponent.name).isEqualTo("http-component")
-        assertThat(httpComponent.criticalLevel).isEqualTo("HIGH")
-        assertThat(healthInfo.status).isEqualTo(HealthStatus.UNHEALTHY)
-
-        verify(exactly = 1) { httpComponent.handleFailure(any()) }
-    }
-
-    @Test
-    fun `given invalid response should return UNHEALTHY status`() {
-        val httpComponent = spyk(HttpHealthComponent(name, CriticalLevel.HIGH, url, method), recordPrivateCalls = true)
-
-        every { httpComponent invoke "execute" withArguments listOf(any<HttpURLConnection>()) } returns 500
-
-        val healthInfo = runBlocking { httpComponent.health() }
-
-        assertThat(httpComponent.name).isEqualTo("http-component")
-        assertThat(httpComponent.criticalLevel).isEqualTo("HIGH")
-        assertThat(healthInfo.status).isEqualTo(HealthStatus.UNHEALTHY)
-
-        verify(exactly = 1) { httpComponent.handleFailure(any()) }
+        assertThat(healthInfo).isEqualToIgnoringGivenFields(expectedHealthInfo, "duration")
     }
 }

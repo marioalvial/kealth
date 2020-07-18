@@ -3,11 +3,10 @@ package io.github.marioalvial.kealth
 import io.github.marioalvial.kealth.core.HealthComponent
 import io.github.marioalvial.kealth.core.HealthStatus
 import io.github.marioalvial.kealth.core.HealthStatus.HEALTHY
+import io.github.marioalvial.kealth.core.HealthStatus.UNHEALTHY
 import java.net.HttpURLConnection
 import java.net.URL
 import java.io.DataOutputStream
-import java.net.ConnectException
-import kotlin.coroutines.CoroutineContext
 
 /**
  * Class that executes health check of external dependency by HTTP request.
@@ -32,15 +31,13 @@ class HttpHealthComponent(
     private val readTimeout: Int = 5000
 ) : HealthComponent() {
 
-    override fun doHealthCheck(): HealthStatus {
+    override fun healthCheck(): HealthStatus {
         val connection = getConfiguredConnection()
-        val status = execute(connection)
-        if (status != healthStatusCode) {
-            val message = connection.responseMessage ?: connection.errorStream.bufferedReader().readText()
-            throw ConnectException(message)
-        }
 
-        return HEALTHY
+        return when (execute(connection)) {
+            healthStatusCode -> HEALTHY
+            else -> UNHEALTHY
+        }
     }
 
     /**
@@ -69,6 +66,4 @@ class HttpHealthComponent(
         out.flush()
         out.close()
     }
-
-    override fun handleFailure(throwable: Throwable) = Unit
 }
