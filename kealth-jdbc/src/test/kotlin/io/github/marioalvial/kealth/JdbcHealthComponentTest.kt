@@ -9,6 +9,7 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.spyk
+import io.mockk.unmockkStatic
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
@@ -28,7 +29,7 @@ class JdbcHealthComponentTest {
 
     @After
     fun tearDown() {
-        mockkStatic(DriverManager::class)
+        unmockkStatic(DriverManager::class)
     }
 
     @Test
