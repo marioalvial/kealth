@@ -27,13 +27,7 @@ jobs:
     steps:
       - checkout
       - build_project
-      - run:
-          name: Code coverage
-          command: |
-            ./gradlew check
-            ./gradlew jacocoRootReport
-            ./gradlew jacocoTestCoverageVerification
-            bash <(curl -s https://codecov.io/bash)
+
 workflows:
   build_and_test:
     jobs:
